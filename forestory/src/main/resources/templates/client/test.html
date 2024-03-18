@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{client/fragments/clientLayout}">
+<head>
+	
+</head>
+<div layout:fragment="content">
+	
+	<!-- 테스트용  -->
+	<div name ="test">
+		<p>실험1</p>
+		<p>email : <span th:text ="${email}"></span> </p>
+		<p>role : <span th:text ="${role}"></span> </p>
+	</div>
+	
+	<br>
+	
+	<div name ="test2">
+		<p>실험2</p>
+		<p>email : <span th:text ="${email2}"></span></p>
+		<p>별명 : <span th:text = "${nickName}"></span></p>
+		<p>전화번호 : <span th:text = "${phoneNumber}"></span></p>
+		<p>가입일 : <span th:text ="${regdate}"></span></p>
+	</div>
+	
+	<br>
+	
+	<div name="test3" th:if="${userDetail}" >
+		<p>실험3</p>
+		<p>email : <span th:text="${userDetail.getUsername}"></span> </p>
+		<p>별명 : <span th:text="${userDetail.getUserNick}"></span> </p>
+		<p>전화번호 : <span th:text="${userDetail.getUserPhone}"></span></p>
+		<p>가입일 : <span th:text="${userDetail.getUserRegdate}"></span></p>
+		
+	</div>
+	
+	<br>
+	<!-- 
+	<div name="test4">
+		<p>실험4</p>
+		<p>email : <span th:text="${session.User.userEmail}"></span> </p>
+	</div>	-->
+</div>
+</html>

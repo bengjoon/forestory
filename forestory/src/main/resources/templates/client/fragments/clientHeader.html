@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<header th:fragment="header">
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		const token = $("meta[name='_csrf']").attr("content");
+		const header = $("meta[name='_csrf_header']").attr("content");
+		/*]]>*/
+	</script>
+	
+	<nav class="navbar navbar-default navbar-trans navbar-expand-lg">
+		<div class="container">
+			<button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+				data-bs-target="#navbarDefault" aria-controls="navbarDefault" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span></span>
+				<span></span>
+				<span></span>
+			</button>
+			<a class="navbar-brand text-brand" href="/"><span class="color-b">Forestory</span></a>
+
+			<div class="navbar-collapse collapse justify-content-center" id="navbarDefault">
+				<ul class="navbar-nav">
+					<li class="nav-item">
+						<a class="nav-link" href="">우리의 숲</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link " href="/board/boardList">자유게시판</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link " href="">마이페이지</a>
+					</li>
+
+				</ul>
+			</div>
+
+			<div>
+				<th:block sec:authorize="isAnonymous()">
+					<div class="small" style="display: inline-block; margin-left: 10px;">
+						<button type="button" id="login" class="btn btn-light" onclick="location.href='/auth/loginPage'">
+							<i class="fa-solid fa-door-open"></i>로그인
+						</button>
+					</div>
+				</th:block>
+				<th:block sec:authorize="isAuthenticated()">
+					<div class="small" style="display: inline-block; margin-left: 10px;">
+						<form method="post" action="/logout">
+							<input type="hidden" id="csrfToken" name="_csrf" th:value="${_csrf.token}">
+							<button type="submit" id="logout" class="btn btn-light">
+								<i class="fa-solid fa-door-open"></i>로그아웃
+							</button>
+						</form>
+						
+					</div>
+				</th:block>
+				|
+				<div class="small" style="display: inline-block; margin-left: 10px;">
+					<button type="button" id="logout" class="btn btn-light" onclick="location.href='/auth/signUpPage'">
+						<i class="fa-solid fa-door-open"></i>회원가입
+					</button>
+				</div>
+			</div>
+		</div>
+	</nav><!-- End Header/Navbar -->
+</header>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+     layout:decorate="~{client/fragments/clientLayout}">
+<head>
+	<link rel="stylesheet" type="text/css" href="/resources/include/css/client/login.css">
+	<style>
+		.chkDiv {
+			font-size: 10pt;
+			color: gray;
+		}
+
+		.paddingBottom {
+			padding-bottom: 20px;
+		}
+
+		#signUpContainer {
+			padding: 40px 0;
+		}
+	</style>
+	
+	<script th:inline="javascript">
+	/*<![CDATA[*/
+	
+		function message(id, color, msg) {
+			$(id).prev().css({'outline-color': color});
+			$(id).css('color', color);
+			$(id).children('span').text(msg);
+		}
+
+
+		function postAjax(duplicateCheck, chk, word) {
+			$.ajax({
+				url: "/auth/" + duplicateCheck +"Vaild",
+				type: "post",
+				data: JSON.stringify({
+					userEmail: $("#" + duplicateCheck).val(),
+					userNick: $("#" + duplicateCheck).val()
+				}),
+				beforeSend : function(xhr) {
+		            xhr.setRequestHeader(header, token);
+		        },
+				contentType: 'application/json; charset=utf-8',
+				dataType: "json",
+				error: function () {
+					alert('시스템 오류')
+				},
+				success: function (result) {
+					if (result == true) {
+						message('#' + chk, 'red', '이미 사용중인 ' + word + '입니다.')
+					} else {
+						message('#' + chk, 'blue', '사용 가능한 ' + word + '입니다.')
+					}
+				}
+			});
+		}
+		
+		function validationAlert(hiddenId, inputFocus) {
+			if($("#"+hiddenId).val() != undefined && $("#"+hiddenId).val() != "" ){
+				alert($("#"+hiddenId).val());
+				$("#"+inputFocus).focus();
+				return true;
+			}
+			return false;
+		}
+		
+
+		$(function () {
+			
+			// 서버에서 유효성 검사 메세지 출력
+			(function(){
+				if(validationAlert('emailError','userEmail')){}
+				else if(validationAlert('pwError','userPw')){}
+				else if(validationAlert('nickError','userNick')){} 	
+				else if(validationAlert('phoneError','userPhone')){}
+			})();
+			
+
+			//이메일 유효성 검사 
+			const emailRegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+			$("#userEmail").on("blur", function () {
+				if ($("#userEmail").val() == "") {
+					message('#chkEmail', 'red', '이메일을 입력하세요.')
+				} else if (!emailRegExp.test($("#userEmail").val())) {
+					message('#chkEmail', 'red', '지원하지 않는 이메일 형식입니다.')
+				} else {
+					postAjax('userEmail', 'chkEmail', '이메일')
+				}
+			});
+
+			//비밀번호 유효성 검사: 영문+숫자+특수문자, 8~16
+			const pwRegExp = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&^])[A-Za-z\d@$!%*?&^]{8,16}$/;
+			$("#userPw").on("blur", function () {
+				if ($("#userPw").val() == "") {
+					message('#chkPw', 'red', '비밀번호를 입력하세요.')
+				} else if (!pwRegExp.test($("#userPw").val())) {
+					message('#chkPw', 'red', '영문/숫자/특수문자를 사용하여 8~16자 사이로 입력하세요.')
+				} else {
+					message('#chkPw', 'blue', '사용가능한 비밀번호 입니다.')
+				}
+			})
+
+			//비밀번호 확인
+			let pwConfirm = 0;
+			let userPwCheck;
+			const pwCheckExp = /^\s+|\s+$/g;
+			$("#userPwCheck").on("blur", function () {
+				userPwCheck = $("#userPwCheck").val();
+				if (!userPwCheck || userPwCheck.trim() === '') {
+					message('#doubleChkPw', 'gray', '비밀번호를 입력해주세요.')
+					pwConfirm = 0;
+				} else if (userPwCheck !== $("#userPw").val()) {
+					message('#doubleChkPw', 'red', '비밀번호가 일치하지 않습니다.')
+					pwConfirm = 0;
+				} else {
+					message('#doubleChkPw', 'blue', '비밀번호가 일치합니다.')
+					pwConfirm = 1;
+				}
+			})
+
+			// 닉네임 유효성 검사: 특수문자 제외, 2~10
+			const nickRegExp = /[ㄱ-ㅎ가-힣a-zA-Z0-9-_]{2,10}$/;
+			$("#userNick").on("blur", function () {
+				if ($("#userNick").val() == "") {
+					message("#chkNick", 'red', '닉네임을 입력하세요.')
+				} else if (!nickRegExp.test($("#userNick").val())) {
+					message('#chkNick', 'red', '닉네임은 특수문자를 제외한 2~10자리로 입력해주세요.')
+				} else {
+					postAjax('userNick', 'chkNick', '닉네임')
+				}
+			})
+
+			// 전화번호 유효성 검사
+			const phoneRegExp = /^(\d{2,3})(\d{3,4})(\d{4})$/;
+			let phoneNumber;
+			$("#userPhone").on("blur", function () {
+				phoneNumber = $("#userPhone").val().replace(/-/g, '');
+				if (phoneNumber == "") {
+					message("#chkPhone", 'red', '전화번호를 입력하세요.')
+				} else if (!phoneRegExp.test(phoneNumber)) {
+					message('#chkPhone', 'red', "올바른 형식의 전화번호를 입력하세요.")
+				} else {
+					message('#chkPhone', 'blue', '사용가능한 전화번호 입니다.')
+					$("#userPhone").val(phoneNumber.replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`));
+				}
+			})
+
+			// 회원가입 
+			$("#signUpBtn").click(function () {
+				if (pwConfirm == 1) {
+					$("#signUpForm").attr({
+						"method": "post",
+						"action": "/auth/signUpProc"
+					});
+					$("#signUpForm").submit();
+				} else {
+					alert('비밀번호가 일치하지 않습니다.')
+					$("#userPwCheck").focus();
+				}
+			});
+		});
+	/*]]>*/
+	</script>
+</head>
+<div layout:fragment="content" class="container">
+	<div id="signUpContainer">
+		
+		<!-- 유효성 검사 오류 받는 곳 -->
+		<th:block th:if ="${validErrors}">
+			<input type="hidden" id="emailError"  th:value="${validErrors['userEmail']}"/>
+			<input type="hidden" id="pwError" th:value="${validErrors['userPw']}"/>
+			<input type="hidden" id="nickError" th:value="${validErrors['userNick']}"/>
+			<input type="hidden" id="phoneError" th:value="${validErrors['userPhone']}"/>
+		</th:block>
+		
+		<div class="d-flex justify-content-center row" >
+			<h3 class="text-center paddingBottom">회원가입 기본정보입력</h3>
+			<div class="col-md-4"></div>
+			<div class="col-md-6">
+				<form id="signUpForm" th:object="${userDto}">
+					<input type="hidden" id="csrfToken" name="_csrf" th:value="${_csrf.token}">
+					
+					<div class="row form-group paddingBottom">
+						<div class="col-md-4">
+							<label class="label">포레스토리ID</label>
+						</div>
+						<div class="col-md-8">
+							<!-- /* th:id 를 쓰면 javascript가 안된다 */ -->
+							<input type="text" class="form-control" id="userEmail" name="userEmail" th:value="${validErrors} ? ${validErrors['keepEmail']} : ''" placeholder="ID(email)"/>
+							<!-- /*
+							<input type="text" class="form-control" if="${validErrors}" id="*{userEmail}" th:value="${validErrors['keepEmail']}" placeholder="ID(email)"/>
+							<input type="text" class="form-control" th:unless="${validErrors}" th:field="*{userEmail}" placeholder="ID(email)"/>
+							*/ -->
+							<div class="chkDiv" id="chkEmail">
+								<span>보유하신 이메일을 입력해주세요.</span>
+							</div>
+						</div>
+					</div>
+					
+					
+					<div class="row form-group paddingBottom">
+						<div class="col-md-4">
+							<label class="label">비밀번호</label> 
+						</div>
+						<div class="col-md-8">
+							<input type="password" class="form-control" th:field="*{userPw}" placeholder="password"/>
+							<div class="chkDiv" id="chkPw">
+								<span>비밀번호를 입력해주세요.</span>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row form-group paddingBottom">
+						<div class="col-md-4">
+							<label class="label">비밀번호 확인</label> 
+						</div>
+						<div class="col-md-8">
+							<input type="password" class="form-control " id="userPwCheck" name="userPwCheck" placeholder="confirm password"/>
+							<div class="chkDiv" id="doubleChkPw">
+								<span>비밀번호를 입력해주세요.</span>
+							</div>
+						</div>
+					</div>
+					<!--  
+					<div class="row form-group paddingBottom">
+						<div class="col-md-4">
+							<label class="label">이름</label>
+						</div>
+						<div class="col-md-8"> 
+							<input type="text" class="form-control" id="userName" name="userName" />
+							<div class="chkDiv" id="chkName">
+								<span>이름를 입력해주세요</span>
+							</div>
+						</div>
+					</div>
+					-->
+					<div class="row form-group paddingBottom">
+						<div class="col-md-4">
+							<label class="label">닉네임</label> 
+						</div>
+						<div class="col-md-8"> 
+							<input type="text"  class="form-control" id="userNick" name="userNick" th:value="${validErrors} ? ${validErrors['keepNick']}:''" placeholder="nickname"/>
+							<div class="chkDiv" id="chkNick">
+								<span>닉네임를 입력해주세요.</span>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row form-group paddingBottom">
+						<div class="col-md-4">
+							<label class="label">전화번호</label> 
+						</div>
+						<div class="col-md-8"> 
+							<input type="text" class="form-control" id="userPhone" name="userPhone" th:value="${validErrors} ? ${validErrors['keepPhone']}:''" placeholder="phone number"/>
+							<div class="chkDiv" id="chkPhone">
+									<span>전화번호를 숫자만 입력해주세요.</span>
+							</div>
+						</div>
+						<!-- 
+						<button type="button" class="form-control button" id="phoneCheckBtn">전화번호 인증</button>
+						 -->
+					</div>
+					
+					<!-- <div class="row form-group">
+						<label class="label">생년월일</label> 
+						<input type="date" class="form-control" id="user_birth" name="user_birth" />
+					</div> -->
+					
+					<!-- <div class="row form-group">
+						<label class="label">주소</label> 
+						<input type="text" class="form-control" id="user_addr" name="user_addr" />
+					</div> -->
+					
+				</form>
+			</div>
+			<div class="col-md-2"></div>
+			<div class="row form-group paddingBottom d-flex justify-content-center">
+				<input type="button" class="form-control button" id="signUpBtn" name="signUpBtn" value="회원가입" />
+			</div>
+		</div>
+	</div>
+</div>
+</html>

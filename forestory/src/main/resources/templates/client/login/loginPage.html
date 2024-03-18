@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+     layout:decorate="~{client/fragments/clientLayout}">
+<head>
+	<link rel="stylesheet" type="text/css" href="/resources/include/css/client/login.css">
+	<style>
+		.padding50{
+			padding: 50px;
+		}
+		.errorMessage{
+			font-size: 10pt;
+			color:red;
+		}
+		
+	</style>
+</head>
+<div layout:fragment="content" class="container">
+   <div id="container" class="padding50">
+	   
+		<h3 class="text-center">로그인 정보 입력</h3>
+		
+		<div class="d-flex justify-content-center">
+			<form id="loginForm" class="loginForm" method="post" action="/auth/loginProc" >
+				<input type="hidden" id="csrfToken" name="_csrf" th:value="${_csrf.token}">
+				<div class="form-group text-center">
+					<input type="text" id="userEmail" name="userEmail" placeholder="ID(email)" class="form-control" />
+				</div>
+				<div class="form-group text-center">
+					<input type="password" id="userPw" name="userPw" placeholder="password" class="form-control" />
+				</div>
+				<div>
+					<input type="checkbox" name="remember-me" id="remember-me"/>
+					<label for="remember-me" >로그인 유지</label>					
+				</div>
+				<div class="errorMessage" th:if="${hasError == true}" th:text="${errorMessage}" ></div>
+				<div class="form-group text-center">
+					<input type="submit" class="form-control button btn-secondary" id="loginBtn" value="로그인" />
+				</div>
+				<div class="text-center">
+					<button type="button" class="btn" id="findIdBtn">아이디 찾기</button>|
+					<button type="button" class="btn" id="findPwdBtn">비밀번호 찾기</button>|
+					<button type="button" class="btn" id="signUpFormBtn">회원가입</button>
+				</div>
+			</form>
+		</div>
+		
+	</div>
+</div>
+</html>

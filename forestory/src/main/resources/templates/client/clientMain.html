@@ -3,10 +3,59 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{client/fragments/clientLayout}">
 <head>
-	
+	<link href="/resources/include/css/client/font.css" rel="stylesheet"/>
+
+	<script th:inline="javascript">
+		$(function(){
+			
+			// API 요청 URL
+			const BASE_URL = "http://apis.data.go.kr/1390804/NihhsTodayFlowerInfo01/selectTodayFlowerView01";
+			// API 요청 서비스키
+			const SERVICE_KEY = "vYFUnpWHK4XXqqJAyw106C8jhUmkQ8gwTPHyHxxcQv7TKOI%2F98axRyS%2BNlXMqoAY7kx1%2F%2B5TI%2B0HiYMpw%2Bov9g%3D%3D";
+			// API 요청 파라미터(인덱스)
+			const DATA_NO = getDays();
+			
+			/* 오늘의 꽃 API 호출 */
+			$.ajax({
+				url: BASE_URL + "?serviceKey=" + SERVICE_KEY + "&dataNo=" + DATA_NO,
+				type: 'get',
+				success: function(response){	// xml 형식
+					let fMonth = $(response).find("fMonth").text();			// 월
+					let fDay = $(response).find("fDay").text();				// 일
+					let flowNm = $(response).find("flowNm").text();			// 꽃이름
+					let fEngNm = $(response).find("fEngNm").text();			// 꽃이름(영문)
+					let flowLang = $(response).find("flowLang").text();		// 꽃말
+					let imgUrl = $(response).find("imgUrl1").text();		// 꽃이미지
+					
+					$("#fDate").text(fMonth +"월 " + fDay + "일");
+					$("#fImg").attr({'src' : imgUrl, 'width' : 300, 'height' : 250});
+					$("#fName").text(flowNm);
+					$("#flowLang").text('"' + flowLang + '"');
+				}
+			});
+		});
+		
+		/* '2024/01/01' ~ 오늘 일수 계산하는 함수 */
+		function getDays(){
+			const startDay = new Date('2024-01-01');
+			const today = new Date();
+			
+			let diff = Math.abs(today.getTime() - startDay.getTime());
+			diff = Math.ceil(diff / (1000 * 60 * 60 * 24));
+			
+			return diff;
+		}
+		
+	</script>
 </head>
 <div layout:fragment="content">
-	
+	<div class="text-center">
+		<h3>오늘의 꽃</h3>
+		<h4 id="fDate"></h4>
+		<img id="fImg"/>
+		<h2 id="fName"></h2>
+		<h4 id="flowLang"></h4>
+	</div>
 	
 </div>
 </html>

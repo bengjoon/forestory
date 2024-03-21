@@ -1,0 +1,9 @@
+@font-face{
+	font-family: 'Human';
+	src: url("/resources/include/font/Humanbeomseok.ttf") format(truetype);
+	font-weight: bold;
+}
+
+* {
+  font-family: 'Human', serif;
+}

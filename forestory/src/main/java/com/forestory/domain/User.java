@@ -1,7 +1,5 @@
 package com.forestory.domain;
 
-
-
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;

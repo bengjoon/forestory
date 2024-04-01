@@ -10,7 +10,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.forestory.client.service.CustomUserDetailsServiceImpl;
+import com.forestory.custom.CustomAccessDeniedHandler;
 import com.forestory.custom.CustomAuthFailureHandler;
+import com.forestory.custom.CustomAuthenticationEntryPoint;
 
 
 @Configuration
@@ -58,7 +60,6 @@ public class SecurityConfig {
     					.alwaysRemember(false) // default: false
     					.userDetailsService(customUserDetailsServiceImpl)
         				);
-        		
         
         http
         		.logout((auth)-> auth
@@ -84,6 +85,14 @@ public class SecurityConfig {
         				.sessionFixation()
         				.changeSessionId()
         				);
+        
+        http
+        		.exceptionHandling((auth) -> auth
+        				.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+        				.accessDeniedHandler(new CustomAccessDeniedHandler())
+        				);
+        
+        
         
         return http.build();
     }

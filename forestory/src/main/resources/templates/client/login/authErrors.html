@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+     layout:decorate="~{client/fragments/clientLayout}">
+<head>
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		$(function () {
+			const text = $("#authFail").val();
+			setTimeout(function(){
+				if(confirm(text)){
+					if(text == "권한이 없는 접근입니다."){
+						location.href="/";
+					}else{
+						location.href ="/auth/loginPage";
+					}
+				}else{
+					history.back();
+				}
+			},300);
+		});
+		/*]]>*/
+	</script>
+</head>
+<div layout:fragment="content" class="container">
+	<input id="authFail" name="authFail" type="hidden" th:value="${authFail}" />
+</div>
+</html>

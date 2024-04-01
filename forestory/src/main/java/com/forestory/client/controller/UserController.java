@@ -74,11 +74,17 @@ public class UserController {
 	//로그인 화면
 	@GetMapping("/loginPage")
 	public String loginForm(@RequestParam(required = false) boolean hasError, 
-			@RequestParam(required = false) String errorMessage,
-			Model model) {
+			@RequestParam(required = false) String errorMessage, Model model) {
+		// 로그인 실패
 		model.addAttribute("hasError", hasError);
 		model.addAttribute("errorMessage", errorMessage);
 		return "client/login/loginPage";
+	}
+	
+	@GetMapping("/authErrors")
+	public String noAuthPage(@RequestParam String authFail, Model model) {
+		model.addAttribute("authFail", authFail);
+		return "client/login/authErrors";
 	}
 	
 	

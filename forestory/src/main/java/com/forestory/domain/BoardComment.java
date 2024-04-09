@@ -44,12 +44,17 @@ public class BoardComment {
 	@JoinColumn(name = "boardNo")
 	private Board board;
 	
+	@ManyToOne
+	@JoinColumn(name = "userNo")
+	private User user;
+	
 	public BoardCommentDTO toDto(BoardComment boardComment) {
 		return BoardCommentDTO.builder()
 						.boardCommentNo(boardComment.getBoardCommentNo())
 						.boardCommentContent(boardComment.getBoardCommentContent())
 						.boardCommentRegdate(boardComment.getBoardCommentRegdate())
 						.board(boardComment.getBoard())
+						.user(boardComment.getUser())
 						.build();
 	}
 	

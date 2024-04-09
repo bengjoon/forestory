@@ -38,11 +38,11 @@ public class BoardServiceImpl implements BoardService {
 	public Page<Board> boardList(String boardCategory, String searchType, String keyword, Pageable pageable) {
 		Page<Board> boardList = null;
 		
-		if(boardCategory == null && keyword == null) {
+		if((boardCategory == null || boardCategory == "") && (keyword == null || keyword == "")) {
 			boardList = boardRepository.findAll(pageable);
-		} else if (boardCategory != null && keyword == null){
+		} else if (boardCategory != null && (keyword == null || keyword == "")){
 			boardList = boardRepository.findByBoardCategory(boardCategory, pageable);
-		} else if (boardCategory == null && keyword != null) {
+		} else if ((boardCategory == null || boardCategory == "") && keyword != null) {
 			switch(searchType) {
 			case "title" -> boardList = boardRepository.findByBoardTitleContaining(keyword, pageable);
 			case "content" -> boardList = boardRepository.findByBoardContentContaining(keyword, pageable);
@@ -147,6 +147,12 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public void deleteComment(long boardCommentNo) {
 		boardCommentRepository.deleteById(boardCommentNo);
+	}
+
+	@Override
+	public List<Board> getTop5Boards() {
+		List<Board> boardList = boardRepository.findTop5ByOrderByBoardNoDesc();
+		return boardList;
 	}
 
 

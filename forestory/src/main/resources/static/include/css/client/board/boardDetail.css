@@ -1,0 +1,131 @@
+.body-div {
+	padding-top: 50px;
+	padding-bottom: 50px;
+}
+
+th {
+	border-top: 2px solid rgb(0, 128, 128);
+	font-size: larger;
+	font-weight: normal;
+	height: 70px;
+	vertical-align: middle;
+}
+
+td {
+	height: 50px;
+	vertical-align: middle;
+}
+
+tr:last-of-type td {
+	padding: 30px 10px;
+	border-bottom: 2px solid rgb(0, 128, 128);
+}
+
+tr:first-of-type td {
+	border-top: 2px solid rgb(0, 128, 128);
+	height: 15px;
+	font-size: small;
+}
+
+.title-span {
+	font-weight: bolder;
+	color: black;
+}
+
+#commentUpdateForm {
+	display: flex;
+}
+
+.form-control {
+	resize: none;
+	width: 93%;
+	float: left;
+}
+
+.form-control:focus {
+	border: 2px solid rgb(0, 128, 128);
+	box-shadow: 0 0 1px rgb(0, 128, 128);
+}
+
+.comment-btn {
+	border: 2px solid rgb(0, 128, 128);
+	border-radius: 5px;
+	background-color: rgb(0, 128, 128);
+	color: white;
+	padding: 3px 10px;
+	height: 60px;
+	margin-left: 10px;
+}
+
+#comment-user {
+	font-weight: bolder;
+}
+
+#comment-regdate {
+	color: dimgray;
+	font-size: smaller;
+}
+
+.menu-nav {
+	margin-bottom: 5px;
+}
+
+.dropdown-container {
+	display: inline-block;
+}
+
+.three-dots:after {
+	cursor: pointer;
+	color: #444;
+	content: '\2807';
+	font-size: 20px;
+	padding: 0 5px;
+}
+
+a {
+	text-decoration: none;
+	color: white;
+}
+
+a:hover {
+	color: white;
+}
+
+a div {
+	padding: 10px 20px;
+}
+
+.dropdown {
+	position: absolute;
+	background-color: rgb(0, 128, 128);
+	outline: none;
+	opacity: 0;
+	z-index: -1;
+	max-height: 0;
+	transition: opacity 0.1s, z-index 0.1s;
+	max-height: 5s;
+}
+
+.dropdown-container:focus {
+	outline: none;
+}
+
+.dropdown-container:focus .dropdown {
+	opacity: 1;
+	z-index: 100;
+	max-height: 100vh;
+	transition: opacity 0.2s, z-index 0.2s;
+	max-height: 0.2s;
+}
+
+.list-group-item {
+	padding: 10px 5px;
+}
+
+#updateFormBtnDiv {
+	margin-top: 5px;
+}
+
+#updateFormBtnDiv button {
+	margin-right: 3px;
+}

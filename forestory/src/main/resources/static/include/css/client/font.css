@@ -4,6 +4,10 @@
 	font-weight: bold;
 }
 
-* {
+.main-body-div {
   font-family: 'Human', serif;
+}
+
+#logo {
+	font-family: 'Human', serif;
 }

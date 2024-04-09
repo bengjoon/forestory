@@ -22,5 +22,5 @@ public interface BoardService {
 	public List<BoardComment> getComments(long boardNo);
 	public void updateComment(long boardCommentNo, BoardCommentDTO boardCommentDTO);
 	public void deleteComment(long boardCommentNo);
-	
+	public List<Board> getTop5Boards();
 }

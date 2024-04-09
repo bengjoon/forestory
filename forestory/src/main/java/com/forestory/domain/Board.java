@@ -12,6 +12,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Temporal;
@@ -61,6 +63,9 @@ public class Board {
 	@JsonIgnore
 	private List<BoardComment> comments;
 	
+	@ManyToOne
+	@JoinColumn(name = "userNo")
+	private User user;
 	
 	//== 빌더 ==//
 	public static BoardDTO toDto(Board board) {
@@ -72,6 +77,7 @@ public class Board {
                     .boardReadcnt(board.getBoardReadcnt())
         			.boardRegdate(board.getBoardRegdate())
         			.comments(board.getComments())
+        			.user(board.getUser())
         			.build();
     }
 	

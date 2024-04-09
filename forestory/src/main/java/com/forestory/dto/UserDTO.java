@@ -1,6 +1,9 @@
 package com.forestory.dto;
 
 import java.sql.Date;
+import java.util.List;
+
+import com.forestory.domain.Board;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -36,4 +39,6 @@ public class UserDTO {
 	private Date userLeavedate;
 	
 	private Boolean userState;
+	
+	private List<Board> boards;
 }

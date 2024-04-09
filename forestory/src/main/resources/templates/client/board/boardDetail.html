@@ -3,6 +3,8 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{client/fragments/clientLayout}">
 <head>
+	<link href="/resources/include/css/client/common.css" rel="stylesheet"/>
+	<link href="/resources/include/css/client/board/boardDetail.css" rel="stylesheet"/>
 	<script th:inline="javascript">
 		var commentContent = "";
 
@@ -42,7 +44,7 @@
 					$("#commentUpdateForm").remove();	
 					
 					// 1-2) 기존 폼 자리 -> h5(댓글 내용) 요소로 변경
-					beforeDiv.html('<h5>' + commentContent + '</h5>');
+					beforeDiv.html('<span>' + commentContent + '</span>');
 					
 					// 1-3) 현재 클릭한 수정 버튼 밑에 새로운 폼 생성
 					createUpdateForm(this);
@@ -77,9 +79,9 @@
 			$(document).on('click', '#updateCancelBtn', function(){
 				let boardCommentContent = $(this).data('commentContent');	// 취소 버튼에 설정해놓은 'data-comment-content' 속성값 가져오기 (기존 댓글 내용)
 				
-				let div = $(this).closest('div');
+				let div = $(this).parent().parent();
 				div.empty();
-				div.html('<h5>' + boardCommentContent + '</h5>');
+				div.html('<span>' + boardCommentContent + '</span>');
 			});
 			
 			/* 댓글 삭제 버튼 클릭 이벤트 */
@@ -109,9 +111,9 @@
 		function createUpdateForm(btn){
 			let boardCommentNo = $(btn).data('commentNo');  // 수정 버튼에 설정해놓은 data-comment-no 속성값 가져오기(댓글번호)
 
-			let div = $(btn).parent().next(); 	//h5(내용) 요소를 감싸고 있는 div
+			let div = $(btn).parent().parent().parent().next(); 	//h5(내용) 요소를 감싸고 있는 div
 
-			let boardCommentContent = div.children('h5').text();		// 변수에 내용 저장해놓기
+			let boardCommentContent = div.children('span').text();		// 변수에 내용 저장해놓기
 			commentContent = boardCommentContent;
 			div.empty();	// div 비우기
 
@@ -121,9 +123,10 @@
 
 			form.append($('<input></input>').prop({type: 'hidden', id: 'boardCommentNo', value: boardCommentNo}));	// 댓글 번호 넘겨주기 위해 input[type='hidden']으로 저장
 			//form.append($('<input></input>')).prop({type: 'hidden', id: 'csrfToken', name: '_csrf', value: })
-			form.append($('<textarea></textarea>').prop({id: 'boardCommentContent2', name: 'boardCommentContent', rows: '2', cols: '100', value: boardCommentContent}));
-			form.after($('<button></button>').prop({id: 'updateCancelBtn', type: 'button'}).attr('data-comment-content', boardCommentContent).text('취소'));
-			form.after($('<button></button>').prop({id: 'updateBtn', type: 'button'}).text('등록'));
+			form.append($('<textarea></textarea>').prop({id: 'boardCommentContent2', class:'form-control',  name: 'boardCommentContent', rows: '2', cols: '100', value: boardCommentContent}));
+			form.after($('<div></div>').prop({id: 'updateFormBtnDiv'}));
+			$("#updateFormBtnDiv").append($('<button></button>').prop({class:'custom-btn', id: 'updateCancelBtn', type: 'button'}).attr('data-comment-content', boardCommentContent).text('취소'));
+			$("#updateFormBtnDiv").append($('<button></button>').prop({class:'custom-btn', id: 'updateBtn', type: 'button'}).text('등록'));
 
 			$("#boardCommentContent2").focus();		// textarea에 focus
 		}
@@ -139,11 +142,11 @@
 				dataType: "json",
 				success: function (comments) {
 					let commentsSize = $(comments).length;
-
+					console.log(commentsSize);
+					$("#commentSize").text(commentsSize);
 					let div = $("#boardCommentList");
 					let str = '';
 
-					str += '<h5 id="commentSize">' + commentsSize + ' Comments</h5>';
 					str += '<ul id="commentList" class="list-group list-group-flush">';
 					
 					$(comments).each(function () {
@@ -151,14 +154,26 @@
 						let boardCommentRegdate = this.boardCommentRegdate;
 
 						str += '<li class="list-group-item">\n';
-						str += '<div>\n';
-						str += '<span>user</span>\n';
-						str += '<span>' + boardCommentRegdate.replace('T', ' ').replaceAll('-', '/') + '</span>\n';
-						str += '<button type="button" class="commentUpdateBtn" data-comment-no="' + this.boardCommentNo + '">수정</button>\n';
-						str += '<button type="button" class="commentDeleteBtn" data-comment-no="' + this.boardCommentNo + '">삭제</button>\n';
+						str += '<div class="menu-nav">\n';
+						str += '<span id="comment-user">' + this.user.userNick + '</span>\n';
+						str += '<span id="comment-regdate">' + boardCommentRegdate.replace('T', ' ').replaceAll('-', '/') + '</span>\n';
+						
+						if(this.user.userNo == /*[[${sessionUserNo}]]*/0.0) {
+							str += '<div class="dropdown-container" tabindex="-1">\n';
+							str += '<div class="three-dots"></div>\n';
+							str += '<div class="dropdown">\n';
+							str += '<a class="commentUpdateBtn" data-comment-no="' + this.boardCommentNo + '"><div>수정</div></a>\n';
+							str += '<a class="commentDeleteBtn" data-comment-no="' + this.boardCommentNo + '"><div>삭제</div></a>\n';
+							str += '</div>\n';
+							str += '</div>\n';
+							
+							//str += '<button type="button" class="commentUpdateBtn custom-btn" data-comment-no="' + this.boardCommentNo + '">수정</button>\n';
+							//str += '<button type="button" class="commentDeleteBtn custom-btn" data-comment-no="' + this.boardCommentNo + '">삭제</button>\n';
+						}						
+						
 						str += '</div>\n';
 						str += '<div>\n';
-						str += '<h5>' + this.boardCommentContent + '</h5>\n';
+						str += '<span>' + this.boardCommentContent + '</span>\n';
 						str += '</div>\n';
 						str += '</li>\n';
 					});
@@ -182,68 +197,85 @@
 		}
 	</script>
 </head>
-<div layout:fragment="content" class="container">
-	<h1 class="text-center">자유게시판</h1>
-	<hr>
-	<div id="boardDetail">
-		<table class="table">
-			<tr>
-				<th colspan="2" th:text="${board.boardTitle}"></th>
-			</tr>
-			<tr>
-				<td th:text="${board.boardRegdate}"></td>
-				<td th:text="${board.boardReadcnt}"></td>
-			</tr>
-			<tr>
-				<td colspan="2" th:utext="${board.boardContent}"></td>
-			</tr>
-		</table>
+<div layout:fragment="content">
+	<div id="title-img">
+		<h1 class="text-center">자유게시판</h1>
 	</div>
-	<div>
-		<button type="button" th:onclick="|location.href='@{/board/list}'|">목록</button>
-		<button type="button" th:onclick="|location.href='@{|/board/edit/${board.boardNo}|}'|">수정</button>
-		<button type="button" th:onclick="'deleteBoard(' + ${board.boardNo} + ')'">삭제</button>
-	</div>
-	<br>
-	<br>
-	<div id="boardComment">
-		<h5>댓글</h5>
-		<hr>
-	</div>
-	<div id="boardCommentInsert">
+	<div class="container body-div">
+		<div id="boardDetail">
+			<table class="table">
+				<tr>
+					<th class="col-8" th:text="|[${board.boardCategory}] ${board.boardTitle}|"></th>
+					<td class="col-2 text-end"><span class="title-span">작성자 </span>[[${board.user.userNick}]]</td>
+					<td class="col-1 text-end"><span class="title-span">조회수 </span>[[${board.boardReadcnt}]]</td>
+					<td class="col-1 text-end">[[${board.boardRegdate}]]</td>
+				</tr>
+				<tr>
+					<td colspan="4" th:utext="${board.boardContent}"></td>
+				</tr>
+			</table>
+		</div>
+		<div class="text-end">
+			<button class="custom-btn" type="button" th:onclick="|location.href='@{/board/list}'|">목록</button>
+			<button class="custom-btn" type="button" th:style="${authResult != 'success'} ? 'display:none'" th:onclick="|location.href='@{|/board/edit/${board.boardNo}|}'|">수정</button>
+			<button class="custom-btn" type="button" th:style="${authResult != 'success'} ? 'display:none'" th:onclick="'deleteBoard(' + ${board.boardNo} + ')'">삭제</button>
+		</div>
+		<br>
+		<br>
+		<div id="boardComment">
+			<h5>☘️댓글
+				<th:block th:if="${comments.isEmpty()}">
+					<span id="commentSize">0</span>
+				</th:block>
+				<th:block th:if="${!comments.isEmpty()}">
+					<span id="commentSize" th:text="${#lists.size(comments)}"></span>
+				</th:block>
+			</h5>
+			<hr>
+		</div>
 		<form id="boardCommentForm">
-			<input type="hidden" id="csrfToken" name="_csrf" th:value="${_csrf.token}">
-			<textarea id="boardCommentContent" 
-					  name="boardCommentContent" 
-					  placeholder="댓글을 입력해주세요"
-					  rows="2" cols="100"></textarea>
-			<button type="button" id="commentInsertBtn">등록</button>
+			<div id="boardCommentInsert">
+				<input type="hidden" id="csrfToken" name="_csrf" th:value="${_csrf.token}">
+				<textarea id="boardCommentContent" 
+						  class="form-control"
+						  name="boardCommentContent" 
+						  th:placeholder="${authResult == ''} ? '로그인 후 작성할 수 있습니다.' : '댓글을 입력해주세요'"
+						  rows="2" cols="100"
+						  th:disabled="${authResult == ''} ? 'disabled'"></textarea>
+				<button class="comment-btn" type="button" id="commentInsertBtn">등록</button>
+			</div>
 		</form>
-	</div>
-	<hr>
-	<div id="boardCommentList">
-		<th:block th:if="${comments.isEmpty()}">
-			<ul class="list-group list-group-flush">
-				<li class="list-group-item">등록된 댓글이 없습니다.</li>
-			</ul>
-		</th:block>
-		<th:block th:if="${!comments.isEmpty()}">
-			<h5 id="commentSize" th:text="|${#lists.size(comments)} Comments|"></h5>
-			<ul id="commentList" class="list-group list-group-flush">
-				<li class="list-group-item" th:each="comment : ${comments}">
-					<div>
-						<span th:text="user"></span>
-						<span th:text="${#temporals.format(comment.boardCommentRegdate, 'yyyy/MM/dd HH:mm:ss')}"></span>
-						<button type="button" class="commentUpdateBtn" th:data-comment-no="${comment.boardCommentNo}">수정</button>
-						<button type="button" class="commentDeleteBtn" th:attr="data-comment-no=${comment.boardCommentNo}">삭제</button>
-					</div>
-					<div>
-						<h5 th:text="${comment.boardCommentContent}"></h5>
-					</div>
-				</li>
-			</ul>
-		</th:block>
-
+		<hr>
+		<div id="boardCommentList">
+			<!--<th:block th:if="${comments.isEmpty()}">
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">등록된 댓글이 없습니다.</li>
+				</ul>
+			</th:block>-->
+			<th:block th:if="${!comments.isEmpty()}">
+				<ul id="commentList" class="list-group list-group-flush">
+					<li class="list-group-item" th:each="comment : ${comments}">
+						<div class="menu-nav">
+							<span id="comment-user" th:text="${comment.user.userNick}"></span>
+							<span id="comment-regdate" th:text="${#temporals.format(comment.boardCommentRegdate, 'yyyy/MM/dd HH:mm:ss')}"></span>
+							<div class="dropdown-container" tabindex="-1" th:style="${comment.user.userNo != sessionUserNo} ? 'display:none'">
+								<div class="three-dots"></div>
+								<div class="dropdown">
+									<a class="commentUpdateBtn" th:data-comment-no="${comment.boardCommentNo}"><div>수정</div></a>
+									<a class="commentDeleteBtn" th:attr="data-comment-no=${comment.boardCommentNo}"><div>삭제</div></a>
+								</div>
+							</div>
+							<!--<button type="button" class="custom-btn commentUpdateBtn" th:style="${comment.user.userNo != sessionUserNo} ? 'display:none'" th:data-comment-no="${comment.boardCommentNo}">수정</button>
+							<button type="button" class="custom-btn commentDeleteBtn" th:style="${comment.user.userNo != sessionUserNo} ? 'display:none'" th:attr="data-comment-no=${comment.boardCommentNo}">삭제</button>-->
+						</div>
+						<div>
+							<span th:text="${comment.boardCommentContent}"></span>
+						</div>
+					</li>
+				</ul>
+			</th:block>
+	
+		</div>
 	</div>
 </div>
 </html>

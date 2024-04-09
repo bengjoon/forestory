@@ -4,7 +4,39 @@
 	  layout:decorate="~{client/fragments/clientLayout}">
 <head>
 	<link href="/resources/include/css/client/font.css" rel="stylesheet"/>
-
+	<style>
+		.main-body-div{
+			overflow: auto;
+			padding-top:50px;
+			padding-bottom:50px;
+		}
+		#f-div {
+			float: left;
+			margin-left: 100px;
+			margin-right: 150px;
+		}
+		#b-div table{
+			margin-top: 30px;
+			width: 700px;
+			font-size: 18px;
+		}
+		#b-div table td:last-of-type {
+			color: dimgrey;
+			font-size: 15px;
+		}
+		#b-div table td a:hover {
+			color: rgb(0, 128, 128);
+		}
+		#b-div h3 span{
+			font-size: 14px;
+			padding-left: 10px;
+			text-decoration: underline;
+			cursor: pointer;
+		}
+		#b-div h3 span:hover {
+			color: rgb(0, 128, 128);
+		}
+	</style>
 	<script th:inline="javascript">
 		$(function(){
 			
@@ -29,9 +61,13 @@
 					
 					$("#fDate").text(fMonth +"월 " + fDay + "일");
 					$("#fImg").attr({'src' : imgUrl, 'width' : 300, 'height' : 250});
-					$("#fName").text(flowNm);
+					$("#fName").text("🌿" + flowNm);
 					$("#flowLang").text('"' + flowLang + '"');
 				}
+			});
+			
+			$("#listBtn").click(function(){
+				location.href="/board/list";
 			});
 		});
 		
@@ -44,18 +80,39 @@
 			diff = Math.ceil(diff / (1000 * 60 * 60 * 24));
 			
 			return diff;
-		}
-		
+		} 
 	</script>
 </head>
 <div layout:fragment="content">
-	<div class="text-center">
-		<h3>오늘의 꽃</h3>
-		<h4 id="fDate"></h4>
-		<img id="fImg"/>
-		<h2 id="fName"></h2>
-		<h4 id="flowLang"></h4>
+	<div class="container main-body-div">
+		<div class="text-center" id="f-div">
+			<h3>오늘의 꽃 - <span id="fDate" style="font-size: smaller;"></span></h3>
+			<br>
+			<img id="fImg"/>
+			<br><br>
+			<h2 id="fName"></h2>
+			<h4 id="flowLang"></h4>
+		</div>
+		<div class="text-left" id="b-div">
+			<h3>자유게시판<span id="listBtn">더보기></span></h3>
+			<table class="table">
+				<th:block th:if="${boardList.isEmpty()}">
+					<tr>
+						<td colspan="3" class="text-center">등록된 게시글이 없습니다.</td>
+					</tr>
+				</th:block>
+				<th:block th:if="${!boardList.isEmpty()}">
+					<tr th:each="board : ${boardList}">
+						<td class="col-2" th:text="|[${board.boardCategory}]|"></td>
+						<td class="col-7">
+							<a th:text="|${board.boardTitle}(${board.comments.size})|"
+								th:href="@{|/board/list/${board.boardNo}|}"></a>
+						</td>
+						<td class="col-3 text-end" th:text="${board.boardRegdate}"></td>
+					</tr>
+				</th:block>
+			</table>
+		</div>
 	</div>
-	
 </div>
 </html>

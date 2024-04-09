@@ -3,6 +3,7 @@
 <header th:fragment="header">
 	<meta name="_csrf" th:content="${_csrf.token}"/>
 	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+	<link href="/resources/include/css/client/font.css" rel="stylesheet"/>
 	<script th:inline="javascript">
 		/*<![CDATA[*/
 		const token = $("meta[name='_csrf']").attr("content");
@@ -19,7 +20,9 @@
 				<span></span>
 				<span></span>
 			</button>
-			<a class="navbar-brand text-brand" href="/"><span class="color-b">Forestory</span></a>
+			<a class="navbar-brand text-brand" href="/">
+				<img src="/resources/images/oak-tree-96.png" style="margin:0 -10px 17px 0;" width="55px"/>
+				<span class="color-b" id="logo">Forestory</span></a>
 
 			<div class="navbar-collapse collapse justify-content-center" id="navbarDefault">
 				<ul class="navbar-nav">

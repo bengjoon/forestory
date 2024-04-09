@@ -1,0 +1,18 @@
+.custom-btn {
+	border: 2px solid rgb(0, 128, 128);
+	border-radius: 5px;
+	background-color: rgb(0, 128, 128);
+	color: white;
+	padding: 3px 8px;
+}
+
+#title-img {
+	padding-top: 100px;
+	padding-bottom: 100px;
+	background-image: url('/resources/images/flowers-5.jpg');
+	background-size: cover;
+}
+
+#title-img h1 {
+	color: white;
+}

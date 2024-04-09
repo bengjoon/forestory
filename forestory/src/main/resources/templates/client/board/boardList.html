@@ -3,9 +3,8 @@
 	layout:decorate="~{client/fragments/clientLayout}">
 
 <head>
-	<style>
-		
-	</style>
+	<link href="/resources/include/css/client/common.css" rel="stylesheet"/>
+	<link href="/resources/include/css/client/board/boardList.css" rel="stylesheet"/>
 	<script>
 		$(function(){
 			let params = new URLSearchParams(window.location.search);
@@ -31,98 +30,115 @@
 		});
 	</script>
 </head>
-<div layout:fragment="content" class="container">
-	<h1 class="text-center">자유게시판</h1>
-	<hr>
-	<!-- 카테고리 navbar -->
-	<nav class="navbar navbar-light bg-light">
-		<ul class="nav nav-pills">
-			<li class="nav-item">
-				<a class="nav-link" href="/board/list">전체</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="/board/list?boardCategory=공지사항">공지사항</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="/board/list?boardCategory=이벤트">이벤트</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="/board/list?boardCategory=나눔">나눔</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="/board/list?boardCategory=질문">질문</a>
-			</li>
-		</ul>
-	</nav>
+<div layout:fragment="content">
+	<div id="title-img">
+		<h1 class="text-center">자유게시판</h1>
+	</div>
+	<div class="container body-div">
+		<!-- 카테고리 navbar -->
+		<nav class="navbar navbar-light bg-light">
+			<ul class="nav nav-pills">
+				<li class="nav-item">
+					<a class="nav-link" href="/board/list">전체</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/board/list?boardCategory=공지사항">공지사항</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/board/list?boardCategory=이벤트">이벤트</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/board/list?boardCategory=나눔">나눔</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/board/list?boardCategory=질문">질문</a>
+				</li>
+			</ul>
+		</nav>
 	
-	<!-- 검색 form -->
-	<form id="boardSearch" class="text-end">
-		<input type="hidden" id="csrfToken" name="_csrf" th:value="${_csrf.token}">
-		<select name="searchType" id="searchType" th:value="${searchType}">
-			<option value="title" th:selected="${searchType} == 'title'">제목</option>
-			<option value="content" th:selected="${searchType} == 'content'">내용</option>
-			<option value="titleOrContent" th:selected="${searchType} == 'titleOrContent'">제목+내용</option>
-		</select>
-		<input type="text" id="keyword" name="keyword" th:value="${keyword}">
-		<button type="button" id="searchBtn">검색</button>
-	</form>
+		<!-- 검색 form -->
+		<form id="boardSearch" class="text-end">
+			<input type="hidden" id="csrfToken" name="_csrf" th:value="${_csrf.token}">
+			<div class="d-inline-flex">
+				<select name="searchType" id="searchType" th:value="${searchType}" class="form-select-sm">
+					<option value="title" th:selected="${searchType} == 'title'">제목</option>
+					<option value="content" th:selected="${searchType} == 'content'">내용</option>
+					<option value="titleOrContent" th:selected="${searchType} == 'titleOrContent'">제목+내용</option>
+				</select>
+				<input type="text" id="keyword" name="keyword" th:value="${keyword}" class="form-control-sm">
+				<button type="button" id="searchBtn" class="custom-btn">검색</button>
+			</div>
+		</form>
 	
-	<!-- 게시글 테이블 -->
-	<div id="boardList">
-		<table class="table">
-			<thead>
-				<tr>
-					<th class="text-center">글번호</th>
-					<th class="text-center">제목</th>
-					<th class="text-center">등록일</th>
-					<th class="text-center">조회수</th>
-				</tr>
-			</thead>
-			<tbody>
-				<th:block th:if="${boardList.isEmpty()}">
+		<!-- 게시글 테이블 -->
+		<div id="boardList">
+			<table class="table">
+				<thead>
 					<tr>
-						<td colspan="4" class="text-center">등록된 게시글이 없습니다.</td>
+						<th class="text-center">글번호</th>
+						<th class="text-center">제목</th>
+						<th class="text-center">작성자</th>
+						<th class="text-center">등록일</th>
+						<th class="text-center">조회수</th>
 					</tr>
-				</th:block>
-				<th:block th:if="${!boardList.isEmpty()}">
-					<tr th:each="board, loop : ${boardList}">
-						<td th:text="${boardList.getTotalElements - (boardList.number * boardList.size) - loop.index}" class="text-center"></td>
-						<td class="text-left">
-							<a th:text="|[${board.boardCategory}] ${board.boardTitle}|" th:href="@{|/board/list/${board.boardNo}|}"></a>
-						</td>
-						<td th:text="${board.boardRegdate}" class="text-center"></td>
-						<td th:text="${board.boardReadcnt}" class="text-center"></td>
-					</tr>
-				</th:block>
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					<th:block th:if="${boardList.isEmpty()}">
+						<tr>
+							<td colspan="5" class="text-center">등록된 게시글이 없습니다.</td>
+						</tr>
+					</th:block>
+					<th:block th:if="${!boardList.isEmpty()}">
+						<tr th:each="board, loop : ${boardList}">
+							<td th:text="${boardList.getTotalElements - (boardList.number * boardList.size) - loop.index}"
+								class="text-center"></td>
+							<td class="text-left">
+								<a th:text="|[${board.boardCategory}] ${board.boardTitle}|"
+									th:href="@{|/board/list/${board.boardNo}|}"></a>
+							</td>
+							<td th:text="${board.user.userNick}" class="text-center"></td>
+							<td th:text="${board.boardRegdate}" class="text-center"></td>
+							<td th:text="${board.boardReadcnt}" class="text-center"></td>
+						</tr>
+					</th:block>
+				</tbody>
+			</table>
+		</div>
+		
+		<!-- 페이징 처리 -->
 		<div class="text-center">
 			<nav th:if="${!boardList.isEmpty()}">
-				<ul class="pagination">
+				<ul class="pagination pagination-ul">
 					<li class="page-item" th:classappend="${boardList.first} ? 'disabled'">
-						<a class="page-link" th:href="${boardList.first} ? '#' : @{/board/list(boardCategory=${category}, keyword=${keyword}, page=${boardList.pageable.pageNumber - 1})}">
+						<a class="page-link"
+							th:href="${boardList.first} ? '#' : @{/board/list(boardCategory=${category}, keyword=${keyword}, page=${boardList.pageable.pageNumber - 1})}">
 							<span aria-hidden="true">&lt;</span>
 						</a>
 					</li>
-			
-					<li th:each="page : ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == boardList.pageable.pageNumber + 1} ? 'active'">
-						<a class="page-link" th:href="@{/board/list(boardCategory=${category}, keyword=${keyword}, page=${page - 1})}" th:text="${page}"></a>
+	
+					<li th:each="page : ${#numbers.sequence(startPage, endPage)}"
+						th:classappend="${page == boardList.pageable.pageNumber + 1} ? 'active'">
+						<a class="page-link"
+							th:href="@{/board/list(boardCategory=${category}, keyword=${keyword}, page=${page - 1})}"
+							th:text="${page}"></a>
 					</li>
-					
+	
 					<li class="page-item" th:classappend="${boardList.last} ? 'disabled'">
-						<a class="page-link" th:href="${boardList.last} ? '#' : @{/board/list(boardCategory=${category}, keyword=${keyword}, page=${boardList.pageable.pageNumber + 1})}">
+						<a class="page-link"
+							th:href="${boardList.last} ? '#' : @{/board/list(boardCategory=${category}, keyword=${keyword}, page=${boardList.pageable.pageNumber + 1})}">
 							<span aria-hidden="true">&gt;</span>
 						</a>
 					</li>
 				</ul>
-				
+	
 			</nav>
 		</div>
+	
+		<!-- 글작성 버튼 -->
+		<div class="text-end">
+			<button type="button" id="insertFormBtn" class="custom-btn">글작성</button>
+		</div>
 	</div>
-	<div class="text-end">
-		<button type="button" id="insertFormBtn">글작성</button>
-	</div>
-
 </div>
 
 </html>

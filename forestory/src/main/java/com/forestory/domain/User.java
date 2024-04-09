@@ -1,6 +1,7 @@
 package com.forestory.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -9,12 +10,15 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters.LocalDateTimeConverter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -53,6 +57,13 @@ public class User {
 	@Column(columnDefinition = "TINYINT(1)")
 	private Boolean userState;
 	
+	@OneToMany(mappedBy = "user")
+	@JsonIgnore
+	private List<Board> boards;
+	
+	@OneToMany(mappedBy = "user")
+	@JsonIgnore
+	private List<BoardComment> comments;
 	
 	@Builder
 	public User(String userEmail, String userPw, String userNick, String userRole, String userPhone,

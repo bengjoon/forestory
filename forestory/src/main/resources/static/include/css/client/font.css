@@ -4,10 +4,20 @@
 	font-weight: bold;
 }
 
+@font-face{
+	font-family: 'Soyo';
+	src: url("/resources/include/font/SoyoMapleBold.ttf") format(truetype);
+}
+
+@font-face {
+    font-family: 'TTHakgyoansimMonggeulmonggeulR';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_keris@1.0/TTHakgyoansimMonggeulmonggeulR.woff2') format('woff2');
+}
+
 .main-body-div {
   font-family: 'Human', serif;
 }
 
 #logo {
-	font-family: 'Human', serif;
+	font-family: 'TTHakgyoansimMonggeulmonggeulR', serif;
 }

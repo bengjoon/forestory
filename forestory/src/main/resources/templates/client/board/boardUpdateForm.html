@@ -3,6 +3,8 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{client/fragments/clientLayout}">
 <head>
+	<link href="/resources/include/css/client/common.css" rel="stylesheet"/>
+	<link href="/resources/include/css/client/board/boardUpdateForm.css" rel="stylesheet"/>
 	<script type="text/javascript" src="/resources/ckeditor/ckeditor.js"></script>
 	<script th:inline="javascript">
 		$(function () {
@@ -27,37 +29,48 @@
 				$("#boardUpdateForm").submit();
 			});
 			
+			$("#cancelBtn").click(function(){
+				location.href="/board/list/" + /*[[${boardDto.boardNo}]]*/0;
+			});
 		});
 		
 	</script>
 </head>
-<div layout:fragment="content" class="container">
-	<h1 class="text-center">자유게시판</h1>
-	<hr>
-	<form role="form" id="boardUpdateForm" th:object="${boardDto}">
-		<input type="hidden" id="csrfToken" name="_csrf" th:value="${_csrf.token}">
+<div layout:fragment="content">
+	<div id="title-img">
+		<h1 class="text-center">자유게시판</h1>
+	</div>
+	<div class="container body-div">
 		<div>
-			<label>분류</label>
-			<select th:field="*{boardCategory}">
-				<option value="공지사항">공지사항</option>
-				<option value="이벤트">이벤트</option>
-				<option value="나눔">나눔</option>
-				<option value="질문">질문</option>
-			</select>
-			<label>제목</label>
-			<input type="text" th:field="*{boardTitle}">
-            <span class="errorSpan" id="titleError" th:if="${errors?.containsKey('boardTitle')}" th:text="${errors['boardTitle']}">span error</span>
+			<h3>글 수정</h3>
+			<hr/>
 		</div>
-		<div>
-			<label>내용</label>
-            <span class="errorSpan" id="contentError" th:if="${errors?.containsKey('boardContent')}" th:text="${errors['boardContent']}">content error</span>
-			<br>
-			<div id="test">
-				<textarea th:field="*{boardContent}"></textarea>
+		<form role="form" id="boardUpdateForm" th:object="${boardDto}">
+			<input type="hidden" id="csrfToken" name="_csrf" th:value="${_csrf.token}">
+			<div class="d-inline-flex category-div">
+				<label>분류</label>
+				<select th:field="*{boardCategory}" class="form-select">
+					<option value="공지사항">공지사항</option>
+					<option value="이벤트">이벤트</option>
+					<option value="나눔">나눔</option>
+					<option value="질문">질문</option>
+				</select>
+				<label>제목</label>
+				<input type="text" th:field="*{boardTitle}" class="form-control">
+	            <span class="errorSpan" id="titleError" th:if="${errors?.containsKey('boardTitle')}" th:text="${errors['boardTitle']}">span error</span>
 			</div>
+			<div>
+	            <span class="errorSpan" id="contentError" th:if="${errors?.containsKey('boardContent')}" th:text="${errors['boardContent']}">content error</span>
+				<br>
+				<div id="test">
+					<textarea th:field="*{boardContent}"></textarea>
+				</div>
+			</div>
+		</form>
+		<div class="text-end btn-div">
+			<button class="custom-btn" type="button" id="cancelBtn">취소</button>
+			<button class="custom-btn" type="button" id="submitBtn">작성</button>
 		</div>
-
-		<button type="button" id="submitBtn">작성</button>
-	</form>
+	</div>
 </div>
 </html>

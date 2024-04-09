@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 
 import com.forestory.domain.Board;
 import com.forestory.domain.BoardComment;
+import com.forestory.domain.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,6 +38,8 @@ public class BoardDTO {
 	
 	private List<BoardComment> comments;
 	
+	private User user;
+	
 	public static Board toEntity(BoardDTO boardDTO) {
         return Board.builder()
         			.boardNo(boardDTO.getBoardNo())
@@ -46,6 +49,7 @@ public class BoardDTO {
                     .boardReadcnt(boardDTO.getBoardReadcnt())
         			.boardRegdate(boardDTO.getBoardRegdate())
         			.comments(boardDTO.getComments())
+        			.user(boardDTO.getUser())
         			.build();
     }
 }

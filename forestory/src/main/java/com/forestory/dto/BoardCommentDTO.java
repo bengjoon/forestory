@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.forestory.domain.Board;
 import com.forestory.domain.BoardComment;
+import com.forestory.domain.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,12 +27,15 @@ public class BoardCommentDTO {
 	
 	private Board board;
 	
+	private User user;
+	
 	public BoardComment toEntity(BoardCommentDTO boardCommentDTO) {
 		return BoardComment.builder()
 						   .boardCommentNo(boardCommentDTO.getBoardCommentNo())
 						   .boardCommentContent(boardCommentDTO.getBoardCommentContent())
 						   .boardCommentRegdate(boardCommentDTO.getBoardCommentRegdate())
 						   .board(boardCommentDTO.getBoard())
+						   .user(boardCommentDTO.getUser())
 						   .build();
 	}
 }

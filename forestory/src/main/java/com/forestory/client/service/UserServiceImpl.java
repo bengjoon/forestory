@@ -82,5 +82,12 @@ public class UserServiceImpl implements UserService {
 	   User user = User.builder().userNick(userDto.getUserNick()).build();
       return userRepository.existsByUserNick(user.getUserNick());
    }
-   
+
+   // 유저 정보 가져오기
+	@Override
+	public User getUser(long userNo) {
+		User user = userRepository.findById(userNo).orElseThrow(() -> new IllegalArgumentException("해당 유저 번호가 존재하지 않습니다."));
+		return user;
+	}
+
 }

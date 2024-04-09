@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,14 +21,16 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.forestory.client.service.BoardService;
+import com.forestory.client.service.UserService;
 import com.forestory.domain.Board;
 import com.forestory.domain.BoardComment;
+import com.forestory.domain.User;
 import com.forestory.dto.BoardCommentDTO;
 import com.forestory.dto.BoardDTO;
+import com.forestory.dto.CustomUserDetails;
 
 import lombok.Setter;
 
@@ -36,6 +39,9 @@ public class BoardController {
 
 	@Setter(onMethod_ = @Autowired)
 	private BoardService boardService;
+
+	@Setter(onMethod_ = @Autowired)
+	private UserService userService;
 
 	@GetMapping("/board/list")
 	public String boardList(String boardCategory, String searchType, String keyword, Model model,
@@ -56,7 +62,7 @@ public class BoardController {
 	}
 
 	@GetMapping("/board/list/{boardNo}")
-	public String boardDetail(@PathVariable long boardNo, Model model) {
+	public String boardDetail(@PathVariable long boardNo, Model model, @AuthenticationPrincipal CustomUserDetails userDetail) {
 		BoardDTO boardDto = boardService.boardDetail(boardNo);
 
 		List<BoardComment> comments = boardDto.getComments();
@@ -64,8 +70,21 @@ public class BoardController {
 		
 		boardService.plusHit(boardNo);
 
+		String authResult = "";
+		if(userDetail != null) {
+			model.addAttribute("sessionUserNo", userDetail.getUserNo());
+			
+			if(boardDto.getUser().getUserNo() == userDetail.getUserNo()) {
+				authResult = "success";
+			} else {
+				authResult = "failure";
+			}
+		}
+		
 		model.addAttribute("board", boardDto);
+		model.addAttribute("authResult", authResult);
 		model.addAttribute("comments", comments);
+		
 
 		return "client/board/boardDetail";
 	}
@@ -77,7 +96,7 @@ public class BoardController {
 	}
 
 	@PostMapping("/insert")
-	public String boardInsert(@Valid BoardDTO boardDTO, BindingResult bindingResult, Model model) {
+	public String boardInsert(@Valid BoardDTO boardDTO, BindingResult bindingResult, Model model, @AuthenticationPrincipal CustomUserDetails userDetail) {
 
 		Map<String, String> errors = new HashMap<>();
 		if (bindingResult.hasErrors()) {
@@ -89,6 +108,11 @@ public class BoardController {
 			model.addAttribute("boardDto", boardDTO);
 
 			return "client/board/boardInsertForm";
+		}
+
+		if(userDetail != null) {
+			User user = userService.getUser(userDetail.getUserNo());
+			boardDTO.setUser(user);
 		}
 
 		boardService.save(boardDTO);
@@ -124,8 +148,13 @@ public class BoardController {
 	// -- 댓글 --//
 	@ResponseBody
 	@PostMapping("/board/comment/{boardNo}")
-	public String boardCommentSave(@PathVariable long boardNo, BoardCommentDTO boardCommentDTO) {
+	public String boardCommentSave(@PathVariable long boardNo, BoardCommentDTO boardCommentDTO, @AuthenticationPrincipal CustomUserDetails userDetail) {
 
+		if(userDetail != null) {
+			User user = userService.getUser(userDetail.getUserNo());
+			boardCommentDTO.setUser(user);
+		}
+		
 		String result = boardService.saveComment(boardNo, boardCommentDTO);
 		
 		return result;

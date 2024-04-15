@@ -14,7 +14,7 @@
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_keris@1.0/TTHakgyoansimMonggeulmonggeulR.woff2') format('woff2');
 }
 
-.main-body-div {
+#f-div {
   font-family: 'Human', serif;
 }
 

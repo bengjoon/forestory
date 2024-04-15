@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.forestory.domain.Board;
+import com.forestory.domain.User;
+
 
 public interface BoardRepository extends JpaRepository<Board, Long>, BoardRepositoryCustom{
 
@@ -20,4 +22,5 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardReposi
 	Page<Board> findByBoardCategoryAndBoardContentContaining(String boardCategory, String title, Pageable pageable);
 	List<Board> findTop5ByOrderByBoardNoDesc();
 
+	List<Board> findByUser(User user);
 }

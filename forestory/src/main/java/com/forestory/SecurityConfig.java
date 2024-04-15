@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.forestory.client.service.CustomOAuth2UserService;
 import com.forestory.client.service.CustomUserDetailsServiceImpl;
 import com.forestory.custom.CustomAccessDeniedHandler;
 import com.forestory.custom.CustomAuthFailureHandler;
@@ -21,12 +22,17 @@ import com.forestory.custom.CustomAuthenticationEntryPoint;
 public class SecurityConfig {
 	
 	private CustomUserDetailsServiceImpl customUserDetailsServiceImpl;
+	private final CustomOAuth2UserService customOAuth2UserService ;
 	
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 
 	    return new BCryptPasswordEncoder();
 	}
+	
+    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService) {
+        this.customOAuth2UserService = customOAuth2UserService;
+    }
 	
 	@Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -36,7 +42,7 @@ public class SecurityConfig {
 		
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/auth/*", "/app/**", "/resources/**", "/board/**").permitAll()
+                        .requestMatchers("/", "/auth/*", "/app/**", "/resources/**", "/board/**", "/**").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated() //다른요청들은().인정되어야한다()
@@ -92,6 +98,13 @@ public class SecurityConfig {
         				.accessDeniedHandler(new CustomAccessDeniedHandler())
         				);
         
+        http
+        		.oauth2Login((oauth2) -> oauth2
+        				.loginPage("/auth/loginPage")
+        				.userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
+        						.userService(customOAuth2UserService)
+        						));
+
         
         
         return http.build();

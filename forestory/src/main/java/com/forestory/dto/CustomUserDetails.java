@@ -4,22 +4,33 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import com.forestory.domain.User;
 
-public class CustomUserDetails implements UserDetails{
+public class CustomUserDetails implements UserDetails, OAuth2User{
+	
 	
 	private User user;
+	private OAuth2Response oAuth2Response;
 	
+	// 일반 회원가입 유저
 	public CustomUserDetails(User user) {
 		this.user = user;
 	}
 	
+	// OAuth2 회원가입 유저
+	public CustomUserDetails(OAuth2Response oAuth2Response, User user) {
+        this.oAuth2Response = oAuth2Response;
+        this.user = user;
+    }
+	
 	/** 
-	 * 계정이 갖고있는 권한 목록을 리턴(권한이 여러개라면 루프해야겠지?)
+	 * 계정이 갖고있는 권한 목록을 리턴
 	 * */
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -107,5 +118,17 @@ public class CustomUserDetails implements UserDetails{
 	public boolean isEnabled() {	
 		return true;
 	}
+
+	@Override
+	public Map<String, Object> getAttributes() {
+		return null;
+	}
+
+	@Override
+	public String getName() {
+		return oAuth2Response.getName();
+	}
+	
+	
 	
 }

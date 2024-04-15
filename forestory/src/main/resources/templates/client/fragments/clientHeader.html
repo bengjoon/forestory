@@ -54,12 +54,14 @@
 						</form>
 					</div>
 				</th:block>
-				|
-				<div class="small" style="display: inline-block; margin-left: 10px;">
-					<button type="button" id="logout" class="btn btn-light" onclick="location.href='/auth/signUpPage'">
-						<i class="fa-solid fa-door-open"></i>회원가입
-					</button>
-				</div>
+				<th:block sec:authorize="isAnonymous()">
+					|
+					<div class="small" style="display: inline-block; margin-left: 10px;">
+						<button type="button" id="logout" class="btn btn-light" onclick="location.href='/auth/signUpPage'">
+							<i class="fa-solid fa-door-open"></i>회원가입
+						</button>
+					</div>
+				</th:block>
 			</div>
 		</div>
 	</nav><!-- End Header/Navbar -->

@@ -23,7 +23,7 @@ public class ClientController {
 	}
 	
 	@GetMapping("/test")
-	public String test(@AuthenticationPrincipal CustomUserDetails userDetail ,Model model) {
+	public String test(@AuthenticationPrincipal CustomUserDetails userDetail, Model model) {
 
 		// 실험1
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();

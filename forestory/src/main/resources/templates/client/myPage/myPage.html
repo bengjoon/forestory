@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+     layout:decorate="~{client/fragments/clientLayout}">
+<head>
+	<link rel="stylesheet" type="text/css" href="/resources/include/css/client/login.css">
+	<style>
+		.chkDiv {
+			font-size: 10pt;
+			color: gray;
+		}
+
+		.paddingBottom {
+			padding-bottom: 20px;
+		}
+
+		#signUpContainer {
+			padding: 40px 0;
+		}
+	</style>
+	
+	<script th:inline="javascript">
+	/*<![CDATA[*/
+	
+	/*]]>*/
+	</script>
+</head>
+<div layout:fragment="content" class="container">
+	<div id="signUpContainer">
+		
+		<div class="d-flex justify-content-center row" >
+			<h3 class="text-center paddingBottom">회원가입 기본정보입력</h3>
+			<div class="col-md-4"></div>
+			<div class="col-md-6">
+				<form id="signUpForm" th:object="${userDetail}">
+					<input type="hidden" id="csrfToken" name="_csrf" th:value="${_csrf.token}">
+					
+					<div class="row form-group paddingBottom">
+						<div class="col-md-4">
+							<label class="label">포레스토리ID</label>
+						</div>
+						<div class="col-md-8">
+							<input type="text" class="form-control" id="userEmail" name="userEmail" th:value="*{getUsername}" readonly/>
+						</div>
+					</div>
+					
+					<!-- 
+					<div class="row form-group paddingBottom">
+						<div class="col-md-4">
+							<label class="label">비밀번호</label> 
+						</div>
+						<div class="col-md-8">
+							<input type="password" class="form-control" th:field="*{userPw}" placeholder="password"/>
+						</div>
+					</div>
+					
+					<div class="row form-group paddingBottom">
+						<div class="col-md-4">
+							<label class="label">비밀번호 확인</label> 
+						</div>
+						<div class="col-md-8">
+							<input type="password" class="form-control " id="userPwCheck" name="userPwCheck" placeholder="confirm password"/>
+						</div>
+					</div>
+					<div class="row form-group paddingBottom">
+						<div class="col-md-4">
+							<label class="label">닉네임</label> 
+						</div>
+						<div class="col-md-8"> 
+							<input type="text"  class="form-control" id="userNick" name="userNick" th:value="${validErrors} ? ${validErrors['keepNick']}:''" placeholder="nickname"/>
+						</div>
+					</div>
+					
+					<div class="row form-group paddingBottom">
+						<div class="col-md-8"> 
+							<input type="text" class="form-control" id="userPhone" name="userPhone" th:value="${validErrors} ? ${validErrors['keepPhone']}:''" placeholder="phone number"/>
+						</div>
+					</div>
+					-->
+					
+				</form>
+			</div>
+			<div class="col-md-2"></div>
+			<div class="row form-group paddingBottom d-flex justify-content-center">
+				<input type="button" class="form-control button" id="signUpBtn" name="signUpBtn" value="회원가입" />
+			</div>
+		</div>
+	</div>
+</div>
+</html>

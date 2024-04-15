@@ -10,9 +10,23 @@
 		const header = $("meta[name='_csrf_header']").attr("content");
 		/*]]>*/
 	</script>
-	
+	<style>
+		#navbarDefault li {
+			padding: 0px 55px;
+		}
+		#user-nav button{
+			font-size: 12px;
+		}
+		#logo {
+			font-size: smaller;
+		}
+		.nav-container{
+			padding-left: 0px;
+			padding-right: 0px;
+		}
+	</style>
 	<nav class="navbar navbar-default navbar-trans navbar-expand-lg">
-		<div class="container">
+		<div class="container nav-container">
 			<button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
 				data-bs-target="#navbarDefault" aria-controls="navbarDefault" aria-expanded="false"
 				aria-label="Toggle navigation">
@@ -21,8 +35,9 @@
 				<span></span>
 			</button>
 			<a class="navbar-brand text-brand" href="/">
-				<img src="/resources/images/oak-tree-96.png" style="margin:0 -10px 17px 0;" width="55px"/>
-				<span class="color-b" id="logo">Forestory</span></a>
+				<img src="/resources/images/oak-tree-96.png" style="margin:0 -10px 17px 0;" width="45px"/>
+				<span class="color-b" id="logo">Forestory</span>
+			</a>
 
 			<div class="navbar-collapse collapse justify-content-center" id="navbarDefault">
 				<ul class="navbar-nav">
@@ -39,16 +54,16 @@
 				</ul>
 			</div>
 
-			<div>
+			<div id="user-nav">
 				<th:block sec:authorize="isAnonymous()">
-					<div class="small" style="display: inline-block; margin-left: 10px;">
+					<div style="display: inline-block;">
 						<button type="button" id="login" class="btn btn-light" onclick="location.href='/auth/loginPage'">
 							<i class="fa-solid fa-door-open"></i>로그인
 						</button>
 					</div>
 				</th:block>
 				<th:block sec:authorize="isAuthenticated()">
-					<div class="small" style="display: inline-block; margin-left: 10px;">
+					<div style="display: inline-block;">
 						<form method="post" action="/logout">
 							<input type="hidden" id="csrfToken" name="_csrf" th:value="${_csrf.token}">
 							<button type="submit" id="logout" class="btn btn-light">
@@ -57,8 +72,8 @@
 						</form>
 					</div>
 				</th:block>
-				|
-				<div class="small" style="display: inline-block; margin-left: 10px;">
+				
+				<div style="display: inline-block;">
 					<button type="button" id="logout" class="btn btn-light" onclick="location.href='/auth/signUpPage'">
 						<i class="fa-solid fa-door-open"></i>회원가입
 					</button>

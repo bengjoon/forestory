@@ -120,16 +120,24 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 
-	@GetMapping("/board/edit/{boardNo}")
-	public String boardUpdateForm(@PathVariable long boardNo, Model model) {
+	@GetMapping("/edit/{boardNo}")
+	public String boardUpdateForm(@PathVariable long boardNo, Model model, @AuthenticationPrincipal CustomUserDetails userDetail) {
 		BoardDTO boardDto = boardService.boardDetail(boardNo);
 
-		model.addAttribute("boardDto", boardDto);
+		String uri = "";
+		if(userDetail != null) {
+			if(boardDto.getUser().getUserNo() == userDetail.getUserNo()) {
+				uri = "client/board/boardUpdateForm";
+				model.addAttribute("boardDto", boardDto);
+			} else {
+				uri = "redirect:/board/list/" + boardNo;
+			}
+		}
 
-		return "client/board/boardUpdateForm";
+		return uri;
 	}
 
-	@PostMapping("/board/edit/{boardNo}")
+	@PostMapping("/edit/{boardNo}")
 	public String boardUpdate(@PathVariable long boardNo, @Valid BoardDTO boardDTO, Model model) {
 
 		boardService.update(boardNo, boardDTO);
@@ -137,17 +145,27 @@ public class BoardController {
 		return "redirect:/board/list/" + boardNo;
 	}
 
-	@GetMapping("/board/delete/{boardNo}")
-	public String boardDelete(@PathVariable long boardNo) {
-		boardService.delete(boardNo);
+	@GetMapping("/delete/{boardNo}")
+	public String boardDelete(@PathVariable long boardNo, @AuthenticationPrincipal CustomUserDetails userDetail) {
+		BoardDTO boardDto = boardService.boardDetail(boardNo);
 		
-		return "redirect:/board/list";
+		String uri = "";
+		if(userDetail != null) {
+			if(boardDto.getUser().getUserNo() == userDetail.getUserNo()) {
+				uri = "redirect:/board/list";
+				boardService.delete(boardNo);
+			} else {
+				uri = "redirect:/board/list/" + boardNo;
+			}
+		}
+
+		return uri;
 	}
 	
 	
 	// -- 댓글 --//
 	@ResponseBody
-	@PostMapping("/board/comment/{boardNo}")
+	@PostMapping("/comment/{boardNo}")
 	public String boardCommentSave(@PathVariable long boardNo, BoardCommentDTO boardCommentDTO, @AuthenticationPrincipal CustomUserDetails userDetail) {
 
 		if(userDetail != null) {
@@ -169,7 +187,7 @@ public class BoardController {
 	}
 	
 	@ResponseBody
-	@PostMapping("/board/comment/edit/{boardCommentNo}")
+	@PostMapping("/comment/edit/{boardCommentNo}")
 	public String boardCommentUpdate(@PathVariable long boardCommentNo, BoardCommentDTO boardCommentDTO) {
 		boardService.updateComment(boardCommentNo, boardCommentDTO);
 		
@@ -177,7 +195,7 @@ public class BoardController {
 	}
 	
 	@ResponseBody
-	@DeleteMapping("/board/comment/{boardCommentNo}")
+	@DeleteMapping("/comment/{boardCommentNo}")
 	public String boardCommentDelete(@PathVariable long boardCommentNo) {
 		boardService.deleteComment(boardCommentNo);
 		

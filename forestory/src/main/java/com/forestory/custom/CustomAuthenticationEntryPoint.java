@@ -25,7 +25,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint{
 		} else if(uri.equals("/edit")) {
 			authFail = "로그인 후 수정 가능합니다.";
 		} else {
-			authFail = "존재하지 않는 페이지거나 로그인해주세요.";
+			authFail = "권한이 없는 페이지입니다.";
 		} 
 		
 		authFail = URLEncoder.encode(authFail, "UTF-8");

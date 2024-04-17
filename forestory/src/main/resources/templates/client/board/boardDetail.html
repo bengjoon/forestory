@@ -15,7 +15,7 @@
 				
 				/* ajax - commentSave */
 				$.ajax({
-					url: "/board/comment/" + /*[[${board.boardNo}]]*/0.0,  		// url : /board/comment/{글번호}
+					url: "/comment/" + /*[[${board.boardNo}]]*/0.0,  		// url : /board/comment/{글번호}
 					type: "post",
 					beforeSend : function(xhr) {
 			            xhr.setRequestHeader(header, token);
@@ -61,7 +61,7 @@
 				let boardCommentNo = $("#boardCommentNo").val();
 				
 				$.ajax({
-					url: "/board/comment/edit/" + boardCommentNo,
+					url: "/comment/edit/" + boardCommentNo,
 					type: "post",
 					beforeSend : function(xhr) {
 			            xhr.setRequestHeader(header, token);
@@ -91,7 +91,7 @@
 				if(confirm("댓글을 삭제하시겠습니까?")){
 					console.log(boardCommentNo);
 					$.ajax({
-						url: "/board/comment/" + boardCommentNo,
+						url: "/comment/" + boardCommentNo,
 						type: "delete",
 						beforeSend : function(xhr) {
 				            xhr.setRequestHeader(header, token);
@@ -192,7 +192,7 @@
 		
 		function deleteBoard(boardNo){
 			if(confirm("글을 정말 삭제하시겠습니까?")){
-				location.href="/board/delete/" + boardNo;
+				location.href="/delete/" + boardNo;
 			}
 		}
 	</script>
@@ -217,7 +217,7 @@
 		</div>
 		<div class="text-end">
 			<button class="custom-btn" type="button" th:onclick="|location.href='@{/board/list}'|">목록</button>
-			<button class="custom-btn" type="button" th:style="${authResult != 'success'} ? 'display:none'" th:onclick="|location.href='@{|/board/edit/${board.boardNo}|}'|">수정</button>
+			<button class="custom-btn" type="button" th:style="${authResult != 'success'} ? 'display:none'" th:onclick="|location.href='@{|/edit/${board.boardNo}|}'|">수정</button>
 			<button class="custom-btn" type="button" th:style="${authResult != 'success'} ? 'display:none'" th:onclick="'deleteBoard(' + ${board.boardNo} + ')'">삭제</button>
 		</div>
 		<br>

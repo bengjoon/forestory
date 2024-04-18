@@ -80,6 +80,7 @@ public class UserController {
 		return "client/login/loginPage";
 	}
 	
+	//권한 없는 접근
 	@GetMapping("/authErrors")
 	public String noAuthPage(@RequestParam String authFail, Model model) {
 		model.addAttribute("authFail", authFail);

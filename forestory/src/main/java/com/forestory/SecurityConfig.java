@@ -1,6 +1,5 @@
 package com.forestory;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -15,7 +14,6 @@ import com.forestory.custom.CustomAccessDeniedHandler;
 import com.forestory.custom.CustomAuthFailureHandler;
 import com.forestory.custom.CustomAuthenticationEntryPoint;
 
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -23,7 +21,6 @@ public class SecurityConfig {
 	
 	private CustomUserDetailsServiceImpl customUserDetailsServiceImpl;
 	private final CustomOAuth2UserService customOAuth2UserService;
-	
 	
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {

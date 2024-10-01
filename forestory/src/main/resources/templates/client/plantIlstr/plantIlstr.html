@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+     layout:decorate="~{client/fragments/clientLayout}">
+<head>
+   <style>
+	   .imgSize{
+		  height: 200px; 
+	   }
+   </style>
+</head>
+<div layout:fragment="content" class="container">
+	<div>
+		<div>
+			<span>식물검색</span>
+		</div>
+		
+		<div >
+			<ul class="col-md-12" style="list-style: none;">
+				<li class="" th:each="plntIlstr, loop : ${plntIlstrList}" style="display: inline-block;"><a th:href="@{|\plantIlstr/${plntIlstr.plantPilbkNo}|}">
+					<div class="card" style="width: 14rem;">
+						<div class="imgSize">
+							<img th:if="${plntIlstr.imgUrl != 'NONE'}" th:src="${plntIlstr.imgUrl}" class="imgSize card-img-top">
+							 
+							<img th:if="${plntIlstr.imgUrl == 'NONE'}" src="resources/images/no-image-40.png" class="imgSize card-img-top" >
+							<!--
+							<span th:if="${plntIlstr.imgUrl == 'NONE'}">이미지 없음</span>
+							-->
+					  			
+						</div>
+						<div class="card-body">
+						  	<h5 class="card-title" th:text="${plntIlstr.plantGnrlNm}"></h5>
+						  	<p class="card-text" ></p>
+						</div>
+					</div>
+				</a></li>
+			</ul>	
+		</div>
+	</div>
+</div>
+</html>

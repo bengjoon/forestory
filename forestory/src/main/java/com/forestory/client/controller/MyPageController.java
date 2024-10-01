@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MyPageController {
 	
+	// for test
 	@Autowired
 	private UserRepository userRepository;
 	

@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
    @Override
    public User signUp(UserDTO userDto) {
 	   
-	   // 빌더패턴으로 회원정보 입력
+	   // 회원정보 입력
 	   User user = User.builder()
 			   			.userEmail(userDto.getUserEmail())
 						.userPw(bCryptPasswordEncoder.encode(userDto.getUserPw()))
@@ -89,5 +89,6 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findById(userNo).orElseThrow(() -> new IllegalArgumentException("해당 유저 번호가 존재하지 않습니다."));
 		return user;
 	}
+
 
 }

@@ -60,7 +60,6 @@ public class UserController {
 	@ResponseBody
 	@PostMapping(value="/userEmailVaild", produces = "application/json; charset=UTF-8")
 	public boolean userEmailVaild(@RequestBody UserDTO userDto) {
-		System.out.println(userDto.getUserEmail());
 		return userService.existsByUserEmail(userDto); // email 중복일 경우 true 반환
 	}
 	
@@ -81,14 +80,10 @@ public class UserController {
 		return "client/login/loginPage";
 	}
 	
+	//권한 없는 접근
 	@GetMapping("/authErrors")
 	public String noAuthPage(@RequestParam String authFail, Model model) {
 		model.addAttribute("authFail", authFail);
 		return "client/login/authErrors";
 	}
-	
-	
-	
-	
-	
 }

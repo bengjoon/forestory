@@ -15,6 +15,11 @@ import com.forestory.domain.User;
 public class CustomUserDetails implements UserDetails, OAuth2User{
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private User user;
 	private OAuth2Response oAuth2Response;
 	
@@ -128,7 +133,4 @@ public class CustomUserDetails implements UserDetails, OAuth2User{
 	public String getName() {
 		return oAuth2Response.getName();
 	}
-	
-	
-	
 }

@@ -76,7 +76,4 @@ public class User {
 		this.userLeavedate = userLeavedate;
 		this.userState = userState;
 	}
-	
-	
-	
 }

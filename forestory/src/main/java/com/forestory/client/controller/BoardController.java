@@ -42,7 +42,7 @@ public class BoardController {
 
 	@Setter(onMethod_ = @Autowired)
 	private UserService userService;
-
+	
 	@GetMapping("/board/list")
 	public String boardList(String boardCategory, String searchType, String keyword, Model model,
 			@PageableDefault(page = 0, size = 10, sort = "boardNo", direction = Sort.Direction.DESC) Pageable pageable) {
@@ -60,7 +60,7 @@ public class BoardController {
 
 		return "client/board/boardList";
 	}
-
+	
 	@GetMapping("/board/list/{boardNo}")
 	public String boardDetail(@PathVariable long boardNo, Model model, @AuthenticationPrincipal CustomUserDetails userDetail) {
 		BoardDTO boardDto = boardService.boardDetail(boardNo);
@@ -119,7 +119,7 @@ public class BoardController {
 
 		return "redirect:/board/list";
 	}
-
+	
 	@GetMapping("/edit/{boardNo}")
 	public String boardUpdateForm(@PathVariable long boardNo, Model model, @AuthenticationPrincipal CustomUserDetails userDetail) {
 		BoardDTO boardDto = boardService.boardDetail(boardNo);

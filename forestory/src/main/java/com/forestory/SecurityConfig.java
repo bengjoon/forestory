@@ -42,7 +42,7 @@ public class SecurityConfig {
 		
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/auth/*", "/app/**", "/resources/**", "/board/**", "/**").permitAll()
+                        .requestMatchers("/", "/auth/*", "/resources/**", "/board/**").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated() //다른요청들은().인정되어야한다()

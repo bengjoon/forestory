@@ -1,6 +1,7 @@
 package com.forestory.dto;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.forestory.domain.Board;
@@ -28,7 +29,7 @@ public class UserDTO {
 	
 	private String userRole;
 	
-	@Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9-_]{2,10}$", message = "닉네임은 특수문자를 제외한 2~10자리여야 합니다.")
+	@Pattern(regexp = "^[ㄱ-ㅎ가-힣a-zA-Z0-9-_]{2,10}$", message = "닉네임은 특수문자를 제외한 2~10자리여야 합니다.")
 	@NotEmpty(message = "닉네임을 입력해주세요.")
 	private String userNick;
 	
@@ -36,7 +37,9 @@ public class UserDTO {
 	@NotEmpty(message = "전화번호를 입력해주세요.")
 	private String userPhone;
 	
-	private Date userLeavedate;
+	private LocalDateTime userLeavedate;
+	
+	private LocalDateTime userRegdate;
 	
 	private Boolean userState;
 	

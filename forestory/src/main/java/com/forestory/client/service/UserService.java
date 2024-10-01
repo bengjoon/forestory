@@ -13,4 +13,5 @@ public interface UserService {
    public boolean existsByUserNick(UserDTO userDto);
    public Map<String, String> validateHandling(UserDTO userDto, BindingResult result);
    public User getUser(long userNo);
+   
 }

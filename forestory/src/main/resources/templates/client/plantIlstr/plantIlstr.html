@@ -3,11 +3,8 @@
      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
      layout:decorate="~{client/fragments/clientLayout}">
 <head>
-   <style>
-	   .imgSize{
-		  height: 200px; 
-	   }
-   </style>
+   <link href="/resources/include/css/client/common.css" rel="stylesheet" />
+	<link href="/resources/include/css/client/plantIlstr.css" rel="stylesheet" />
    <script th:inline="javascript">
 	   /*<![CDATA[*/
 	   $(function(){
@@ -27,36 +24,40 @@
 	   /*]]>*/
    </script>
 </head>
-<div layout:fragment="content" class="container">
-	<div>
-		<div>
-			<span>식물검색</span>
-			<div class="input-group mb-3">
-			  <input type="text" class="form-control" id="keyword" name="keyword" th:value="${keyword}" placeholder="검색어를 입력해주세요">
-			  <button class="btn btn-outline-secondary" id="searchBtn" name="searchBtn" type="button">검색</button>
+<div layout:fragment="content">
+	<div id="title-img">
+		<h1 class="text-center">식물도감</h1>
+	</div>
+	<div class="container body-div">
+		<div class="text-center mt-4">
+			<div class="input-group mb-4 d-inline-flex">
+				<input type="text" class="form-control" id="keyword" name="keyword" th:value="${keyword}" placeholder="검색어를 입력해주세요">
+				<button class="btn btn-outline-secondary custom-btn" id="searchBtn" name="searchBtn" type="button">
+					검색
+				</button>
 			</div>
 		</div>
-		
-		<div >
-			<ul class="col-md-12" style="list-style: none;">
-				<li class="" th:each="plntIlstr, loop : ${plntIlstrList}" style="display: inline-block;"><a th:href="@{|\plantIlstr/${plntIlstr.plantPilbkNo}|}">
-					<div class="card" style="width: 14rem;">
-						<div class="imgSize">
-							<img th:if="${plntIlstr.imgUrl != 'NONE'}" th:src="${plntIlstr.imgUrl}" class="imgSize card-img-top">
-							 
-							<img th:if="${plntIlstr.imgUrl == 'NONE'}" src="resources/images/no-image-40.png" class="imgSize card-img-top" >
-							<!--
-							<span th:if="${plntIlstr.imgUrl == 'NONE'}">이미지 없음</span>
-							-->
-					  			
-						</div>
-						<div class="card-body">
-						  	<h5 class="card-title" th:text="${plntIlstr.plantGnrlNm}"></h5>
-						  	<p class="card-text" ></p>
-						</div>
-					</div>
-				</a></li>
-			</ul>	
+		<div class="list-div">
+			<th:block th:if="${!plntIlstrList.isEmpty()}">
+				<ul class="col-md-12 plant-ul" style="list-style: none;">
+					<li class="plant-li" th:each="plntIlstr, loop : ${plntIlstrList}" style="display: inline-block;">
+						<a th:href="@{|\plantIlstr/${plntIlstr.plantPilbkNo}|}">
+							<div class="card" style="width: 14rem; height: 16rem;">
+								<div class="img-div">
+									<img class="plant-img card-img-top" th:src="${plntIlstr.imgUrl}" onerror="this.src='/resources/images/no-image-b.png'">
+								</div>
+								<div class="card-body text-start">
+								  	<b class="card-title" th:text="${plntIlstr.plantGnrlNm}"></b>
+								  	<p class="card-text"></p>
+								</div>
+							</div>
+						</a>
+					</li>
+				</ul>	
+			</th:block>
+			<th:block th:if="${plntIlstrList.isEmpty()}">
+				<p class="text-center mt-5">검색 결과가 존재하지 않습니다.</p>
+			</th:block>
 		</div>
 		
 		<!-- 페이징 처리 -->

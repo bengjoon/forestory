@@ -40,6 +40,7 @@ public class ApiController {
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
 		model.addAttribute("plntIlstrList",plntIlstrList);
+		model.addAttribute("keyword",keyword);
 		
 		return "client/plantIlstr/plantIlstr";
 	}

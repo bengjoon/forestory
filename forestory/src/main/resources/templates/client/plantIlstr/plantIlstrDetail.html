@@ -5,46 +5,128 @@
 <head>
 	<link href="/resources/include/css/client/common.css" rel="stylesheet" />
 	<link href="/resources/include/css/client/plantIlstr.css" rel="stylesheet" />
+	<script th:inline="javascript">
+		$(function(){
+			$("#listBtn").click(function(){
+				location.href="/plantIlstr";
+			});
+		});
+	</script>
 </head>
 <div layout:fragment="content">
    <div id="title-img">
 		<h1 class="text-center">식물도감</h1>
 	</div>
-	<div class="container body-div">
-		<h4 th:text="${pln.plantGnrlNm}"></h4>
-		<hr/>
-	</div>
-
-	<div>
-		<div name="정보?">
-			<div th:text="'과국명: '+ ${pln.familyKorNm}"></div>
-			<div th:text="'속국명: '+ ${pln.genusKorNm}"></div>
-			<div th:text="'국명: '+ ${pln.plantGnrlNm}"></div>
-			<div th:text="'과명: '+ ${pln.familyNm}"></div>
-			<div th:text="'속명: '+ ${pln.genusNm}"></div>
-			<div th:text="'영문명: '+ ${pln.engNm}"></div>
-			<div th:text="'원산지: '+ ${pln.orplcNm}"></div>
-			<div th:text="'분포정보: '+ ${pln.dstrb}"></div>
-			<div th:text="'이미지: '+ ${pln.imgUrl}"></div>
+	<div class="container body-div" id="detail-div">
+		<h4 class="m-4" th:text="${pln.plantGnrlNm} + '(' + ${pln.engNm} + ')'"></h4>
+		<div class="mt-3">
+			<table class="table">
+				<tr>
+					<td rowspan="2" class="col-md-3 text-center align-middle">분류</td>
+					<td th:text="${pln.familyKorNm} + ' ' + ${pln.genusKorNm}"></td>
+				</tr>
+				<tr>
+					<td th:text="${pln.familyNm} + ' ' + ${pln.genusNm}"></td>
+				</tr>
+				<tr th:if="${not #strings.isEmpty(pln.dstrb)}">
+					<td class="text-center">분포정보</td>
+					<td th:text="${pln.dstrb}"></td>
+				</tr>
+				<tr th:if="${not #strings.isEmpty(pln.orplcNm)}">
+					<td class="text-center">원산지</td>
+					<td th:text="${pln.orplcNm}"></td>
+				</tr>
+			</table>
 		</div>
-		<div name="내용?">
-			<div th:if="${not #strings.isEmpty(pln.branchDesc)}" th:text="'가지: '+ ${pln.branchDesc}"></div>
-			<div th:if="${not #strings.isEmpty(pln.brdMthdDesc)}" th:text="'번식방법: '+ ${pln.brdMthdDesc}"></div>
-			<div th:if="${not #strings.isEmpty(pln.farmSpftDesc)}" th:text="'재배특성: '+ ${pln.farmSpftDesc}"></div>
-			<div th:if="${not #strings.isEmpty(pln.flwrDesc)}" th:text="'꽃설명: '+ ${pln.flwrDesc}"></div>
-			<div th:if="${not #strings.isEmpty(pln.leafDesc)}" th:text="'잎설명: '+ ${pln.leafDesc}"></div>
-			<div th:if="${not #strings.isEmpty(pln.rootDesc)}" th:text="'뿌리설명: '+ ${pln.rootDesc}"></div>
-			<div th:if="${not #strings.isEmpty(pln.shpe)}" th:text="'형태: '+ ${pln.shpe}"></div>
-			<div th:if="${not #strings.isEmpty(pln.spft)}" th:text="'특징: '+ ${pln.spft}"></div>
-			<div th:if="${not #strings.isEmpty(pln.sporeDesc)}" th:text="'포자: '+ ${pln.sporeDesc}"></div>
-			<div th:if="${not #strings.isEmpty(pln.stemDesc)}" th:text="'줄기설명: '+ ${pln.stemDesc}"></div>
-			<div th:if="${not #strings.isEmpty(pln.sz)}" th:text="'크기설명: '+ ${pln.sz}"></div>
-			<div th:if="${not #strings.isEmpty(pln.useMthdDesc)}" th:text="'사용법: '+ ${pln.useMthdDesc}"></div>
-			<div th:if="${not #strings.isEmpty(pln.woodDesc)}" th:text="'목재설명: '+ ${pln.woodDesc}"></div>
-			<div th:if="${not #strings.isEmpty(pln.fritDesc)}" th:text="'열매설명: '+ ${pln.fritDesc}"></div>
-			<div th:if="${not #strings.isEmpty(pln.grwEvrntDesc)}" th:text="'생육환경설명: '+ ${pln.grwEvrntDesc}"></div>
-			<div th:if="${not #strings.isEmpty(pln.prtcPlnDesc)}" th:text="'보호방안: '+ ${pln.prtcPlnDesc}"></div>
+		<div class="d-img-div pt-4 pb-5 text-center">
+			<img th:src="${pln.imgUrl}" height="400px" onerror="this.src='/resources/images/no-image-b.png'" />
+		</div>
+		<div th:if="${not #strings.isEmpty(pln.flwrDesc)}" class="desc-div">
+			<h5>꽃</h5>
+			<p class="desc-p" th:text="${pln.flwrDesc}"></p>
+			<hr/>
+		</div>
+		<div th:if="${not #strings.isEmpty(pln.leafDesc)}" class="desc-div">
+			<h5>잎</h5>
+			<p class="desc-p" th:text="${pln.leafDesc}"></p>
+			<hr/>
+		</div>
+		<div th:if="${not #strings.isEmpty(pln.fritDesc)}" class="desc-div">
+			<h5>열매</h5>
+			<p class="desc-p" th:text="${pln.fritDesc}"></p>
+			<hr/>
+		</div>
+		<div th:if="${not #strings.isEmpty(pln.stemDesc)}" class="desc-div">
+			<h5>줄기</h5>
+			<p class="desc-p" th:text="${pln.stemDesc}"></p>
+			<hr/>
+		</div>
+		<div th:if="${not #strings.isEmpty(pln.rootDesc)}" class="desc-div">
+			<h5>뿌리</h5>
+			<p class="desc-p" th:text="${pln.rootDesc}"></p>
+			<hr/>	
+		</div>
+		<div th:if="${not #strings.isEmpty(pln.spft)}" class="desc-div">
+			<h5>특징</h5>
+			<p class="desc-p" th:text="${pln.spft}"></p>
+			<hr/>
+		</div>
+		<div th:if="${not #strings.isEmpty(pln.sz)}" class="desc-div">
+			<h5>크기</h5>
+			<p class="desc-p" th:text="${pln.sz}"></p>
+			<hr/>
+		</div>
+		<div th:if="${not #strings.isEmpty(pln.shpe)}" class="desc-div">
+			<h5>형태</h5>
+			<p class="desc-p" th:text="${pln.shpe}"></p>
+			<hr/>
+		</div>
+		<div th:if="${not #strings.isEmpty(pln.useMthdDesc)}" class="desc-div">
+			<h5>활용</h5>
+			<p class="desc-p" th:text="${pln.useMthdDesc}"></p>
+			<hr/>
+		</div>
+		<div th:if="${not #strings.isEmpty(pln.grwEvrntDesc)}" class="desc-div">
+			<h5>생육환경</h5>
+			<p class="desc-p" th:text="${pln.grwEvrntDesc}"></p>
+			<hr/>
+		</div>
+		<div th:if="${not #strings.isEmpty(pln.brdMthdDesc)}" class="desc-div">
+			<h5>번식방법</h5>
+			<p class="desc-p" th:text="${pln.brdMthdDesc}"></p>
+			<hr/>
+		</div>
+		<div th:if="${not #strings.isEmpty(pln.farmSpftDesc)}" class="desc-div">
+			<h5>재배특성</h5>
+			<p class="desc-p" th:text="${pln.farmSpftDesc}"></p>
+			<hr/>
+		</div>
+		<div th:if="${not #strings.isEmpty(pln.prtcPlnDesc)}" class="desc-div">
+			<h5>보호방안</h5>
+			<p class="desc-p" th:text="${pln.prtcPlnDesc}"></p>
+			<hr/>
+		</div>
+		<div th:if="${not #strings.isEmpty(pln.woodDesc)}" class="desc-div">
+			<h5>목재</h5>
+			<p class="desc-p" th:text="${pln.woodDesc}"></p>
+			<hr/>
+		</div>
+		<div th:if="${not #strings.isEmpty(pln.branchDesc)}" class="desc-div">
+			<h5>가지</h5>
+			<p class="desc-p" th:text="${pln.branchDesc}"></p>
+			<hr/>
+		</div>
+		<div th:if="${not #strings.isEmpty(pln.sporeDesc)}" class="desc-div">
+			<h5>포자</h5>
+			<p class="desc-p" th:text="${pln.sporeDesc}"></p>
+			<hr/>
+		</div>
+		<div class="desc-div">
+			<p>※ 본 데이터에 대한 모든 저작권리는 국립수목원 또는 원저작자에게 있습니다.</p>
+		</div>
+		<div class="btn-div text-end">
+			<button class="custom-btn" id="listBtn">목록</button>
 		</div>
 	</div>
-  </div>
+</div>
 </html>

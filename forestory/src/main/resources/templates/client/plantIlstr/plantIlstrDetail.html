@@ -3,9 +3,18 @@
      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
      layout:decorate="~{client/fragments/clientLayout}">
 <head>
-   
+	<link href="/resources/include/css/client/common.css" rel="stylesheet" />
+	<link href="/resources/include/css/client/plantIlstr.css" rel="stylesheet" />
 </head>
-<div layout:fragment="content" class="container">
+<div layout:fragment="content">
+   <div id="title-img">
+		<h1 class="text-center">식물도감</h1>
+	</div>
+	<div class="container body-div">
+		<h4 th:text="${pln.plantGnrlNm}"></h4>
+		<hr/>
+	</div>
+
 	<div>
 		<div name="정보?">
 			<div th:text="'과국명: '+ ${pln.familyKorNm}"></div>
@@ -37,6 +46,5 @@
 			<div th:if="${not #strings.isEmpty(pln.prtcPlnDesc)}" th:text="'보호방안: '+ ${pln.prtcPlnDesc}"></div>
 		</div>
 	</div>
-   
-</div>
+  </div>
 </html>

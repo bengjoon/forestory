@@ -141,9 +141,7 @@ public class ApiService {
 			}
 			
 			psRepository.saveAll(psData);
-			
-			
-			
+				
 		} catch(IOException e) {
 			e.printStackTrace();
 		}

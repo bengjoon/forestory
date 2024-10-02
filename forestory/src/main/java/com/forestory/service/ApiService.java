@@ -155,7 +155,7 @@ public class ApiService {
 //	        System.out.println(sb.toString());
 //	        conn.disconnect();
 			
-		} catch(SAXException e) {
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
 

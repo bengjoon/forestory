@@ -1,33 +1,91 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{client/fragments/clientLayout}">
+<html xmlns:th="http://www.thymeleaf.org" 
+     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+     layout:decorate="~{client/fragments/clientLayout}">
 <head>
-	<link href="/resources/include/css/client/common.css" rel="stylesheet" />
-	<link href="/resources/include/css/client/plantIlstr.css" rel="stylesheet" />
+   <style>
+	   .imgSize{
+		  height: 200px; 
+	   }
+   </style>
+   <script th:inline="javascript">
+	   /*<![CDATA[*/
+	   $(function(){
+		   
+		   let params = new URLSearchParams(window.location.search);
+		   
+		   /* 검색 버튼 클릭 시 */
+      		$("#searchBtn").click(function(){
+				let keyword = $("#keyword").val().replace(' ','');
+				params.set('keyword', keyword);
+
+				let finalURI = location.pathname + "?" + params.toString();
+				location.href = finalURI;
+			});
+		   
+	   }); //끝
+	   /*]]>*/
+   </script>
 </head>
-<div layout:fragment="content">
-	<div id="title-img">
-		<h1 class="text-center">식물도감</h1>
-	</div>
-	<div class="container body-div">
-		<div class="list-div">
+<div layout:fragment="content" class="container">
+	<div>
+		<div>
+			<span>식물검색</span>
+			<div class="input-group mb-3">
+			  <input type="text" class="form-control" id="keyword" name="keyword" th:value="${keyword}" placeholder="검색어를 입력해주세요">
+			  <button class="btn btn-outline-secondary" id="searchBtn" name="searchBtn" type="button">검색</button>
+			</div>
+		</div>
+		
+		<div >
 			<ul class="col-md-12" style="list-style: none;">
-				<li class="" th:each="plntIlstr, loop : ${plntIlstrList}" style="display: inline-block;">
-					<a th:href="@{|\plantIlstr/${plntIlstr.plantPilbkNo}|}">
-						<div class="card" style="width: 16rem; height: 18rem;">
-							<div class="img-div">
-								<img class="plant-img card-img-top" th:src="${plntIlstr.imgUrl}" onerror="this.src='resources/images/no-image-b.png'">
-							</div>
-							<div class="card-body text-start">
-								<b class="card-title" th:text="${plntIlstr.plantGnrlNm}"></b>
-								<p class="card-text"></p>
-							</div>
+				<li class="" th:each="plntIlstr, loop : ${plntIlstrList}" style="display: inline-block;"><a th:href="@{|\plantIlstr/${plntIlstr.plantPilbkNo}|}">
+					<div class="card" style="width: 14rem;">
+						<div class="imgSize">
+							<img th:if="${plntIlstr.imgUrl != 'NONE'}" th:src="${plntIlstr.imgUrl}" class="imgSize card-img-top">
+							 
+							<img th:if="${plntIlstr.imgUrl == 'NONE'}" src="resources/images/no-image-40.png" class="imgSize card-img-top" >
+							<!--
+							<span th:if="${plntIlstr.imgUrl == 'NONE'}">이미지 없음</span>
+							-->
+					  			
 						</div>
-					</a>
-				</li>
-			</ul>
+						<div class="card-body">
+						  	<h5 class="card-title" th:text="${plntIlstr.plantGnrlNm}"></h5>
+						  	<p class="card-text" ></p>
+						</div>
+					</div>
+				</a></li>
+			</ul>	
+		</div>
+		
+		<!-- 페이징 처리 -->
+		<div class="text-center">
+			<nav th:if="${!plntIlstrList.isEmpty()}">
+				<ul class="pagination pagination-ul">
+					<li class="page-item" th:classappend="${plntIlstrList.first} ? 'disabled'">
+						<a class="page-link"
+							th:href="${plntIlstrList.first} ? '#' : @{/plantIlstr(keyword=${keyword}, page=${plntIlstrList.pageable.pageNumber - 1})}">
+							<span aria-hidden="true">&lt;</span>
+						</a>
+					</li>
+	
+					<li th:each="page : ${#numbers.sequence(startPage, endPage)}"
+						th:classappend="${page == plntIlstrList.pageable.pageNumber + 1} ? 'active'">
+						<a class="page-link"
+							th:href="@{/plantIlstr(keyword=${keyword}, page=${page - 1})}"
+							th:text="${page}"></a>
+					</li>
+	
+					<li class="page-item" th:classappend="${plntIlstrList.last} ? 'disabled'">
+						<a class="page-link"
+							th:href="${plntIlstrList.last} ? '#' : @{/plantIlstr(keyword=${keyword}, page=${plntIlstrList.pageable.pageNumber + 1})}">
+							<span aria-hidden="true">&gt;</span>
+						</a>
+					</li>
+				</ul>
+			</nav>
 		</div>
 	</div>
 </div>
-
 </html>

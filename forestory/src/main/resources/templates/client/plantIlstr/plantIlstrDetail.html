@@ -6,6 +6,37 @@
    
 </head>
 <div layout:fragment="content" class="container">
+	<div>
+		<div name="정보?">
+			<div th:text="'과국명: '+ ${pln.familyKorNm}"></div>
+			<div th:text="'속국명: '+ ${pln.genusKorNm}"></div>
+			<div th:text="'국명: '+ ${pln.plantGnrlNm}"></div>
+			<div th:text="'과명: '+ ${pln.familyNm}"></div>
+			<div th:text="'속명: '+ ${pln.genusNm}"></div>
+			<div th:text="'영문명: '+ ${pln.engNm}"></div>
+			<div th:text="'원산지: '+ ${pln.orplcNm}"></div>
+			<div th:text="'분포정보: '+ ${pln.dstrb}"></div>
+			<div th:text="'이미지: '+ ${pln.imgUrl}"></div>
+		</div>
+		<div name="내용?">
+			<div th:if="${not #strings.isEmpty(pln.branchDesc)}" th:text="'가지: '+ ${pln.branchDesc}"></div>
+			<div th:if="${not #strings.isEmpty(pln.brdMthdDesc)}" th:text="'번식방법: '+ ${pln.brdMthdDesc}"></div>
+			<div th:if="${not #strings.isEmpty(pln.farmSpftDesc)}" th:text="'재배특성: '+ ${pln.farmSpftDesc}"></div>
+			<div th:if="${not #strings.isEmpty(pln.flwrDesc)}" th:text="'꽃설명: '+ ${pln.flwrDesc}"></div>
+			<div th:if="${not #strings.isEmpty(pln.leafDesc)}" th:text="'잎설명: '+ ${pln.leafDesc}"></div>
+			<div th:if="${not #strings.isEmpty(pln.rootDesc)}" th:text="'뿌리설명: '+ ${pln.rootDesc}"></div>
+			<div th:if="${not #strings.isEmpty(pln.shpe)}" th:text="'형태: '+ ${pln.shpe}"></div>
+			<div th:if="${not #strings.isEmpty(pln.spft)}" th:text="'특징: '+ ${pln.spft}"></div>
+			<div th:if="${not #strings.isEmpty(pln.sporeDesc)}" th:text="'포자: '+ ${pln.sporeDesc}"></div>
+			<div th:if="${not #strings.isEmpty(pln.stemDesc)}" th:text="'줄기설명: '+ ${pln.stemDesc}"></div>
+			<div th:if="${not #strings.isEmpty(pln.sz)}" th:text="'크기설명: '+ ${pln.sz}"></div>
+			<div th:if="${not #strings.isEmpty(pln.useMthdDesc)}" th:text="'사용법: '+ ${pln.useMthdDesc}"></div>
+			<div th:if="${not #strings.isEmpty(pln.woodDesc)}" th:text="'목재설명: '+ ${pln.woodDesc}"></div>
+			<div th:if="${not #strings.isEmpty(pln.fritDesc)}" th:text="'열매설명: '+ ${pln.fritDesc}"></div>
+			<div th:if="${not #strings.isEmpty(pln.grwEvrntDesc)}" th:text="'생육환경설명: '+ ${pln.grwEvrntDesc}"></div>
+			<div th:if="${not #strings.isEmpty(pln.prtcPlnDesc)}" th:text="'보호방안: '+ ${pln.prtcPlnDesc}"></div>
+		</div>
+	</div>
    
 </div>
 </html>

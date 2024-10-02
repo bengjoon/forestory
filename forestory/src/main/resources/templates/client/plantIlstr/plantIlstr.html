@@ -65,7 +65,13 @@
 				<ul class="pagination pagination-ul">
 					<li class="page-item" th:classappend="${plntIlstrList.first} ? 'disabled'">
 						<a class="page-link"
-							th:href="${plntIlstrList.first} ? '#' : @{/plantIlstr(keyword=${keyword}, page=${plntIlstrList.pageable.pageNumber - 1})}">
+							th:href="${plntIlstrList.first} ? '#' : @{/plantIlstr(keyword=${keyword}, page=1)}">
+							<span aria-hidden="true">&lt;&lt;</span>
+						</a>
+					</li>
+					<li class="page-item" th:classappend="${plntIlstrList.first} ? 'disabled'">
+						<a class="page-link"
+							th:href="${plntIlstrList.first} ? '#' : @{/plantIlstr(keyword=${keyword}, page=${plntIlstrList.pageable.pageNumber})}">
 							<span aria-hidden="true">&lt;</span>
 						</a>
 					</li>
@@ -73,14 +79,20 @@
 					<li th:each="page : ${#numbers.sequence(startPage, endPage)}"
 						th:classappend="${page == plntIlstrList.pageable.pageNumber + 1} ? 'active'">
 						<a class="page-link"
-							th:href="@{/plantIlstr(keyword=${keyword}, page=${page - 1})}"
+							th:href="@{/plantIlstr(keyword=${keyword}, page=${page})}"
 							th:text="${page}"></a>
 					</li>
 	
 					<li class="page-item" th:classappend="${plntIlstrList.last} ? 'disabled'">
 						<a class="page-link"
-							th:href="${plntIlstrList.last} ? '#' : @{/plantIlstr(keyword=${keyword}, page=${plntIlstrList.pageable.pageNumber + 1})}">
+							th:href="${plntIlstrList.last} ? '#' : @{/plantIlstr(keyword=${keyword}, page=${plntIlstrList.pageable.pageNumber}+2)}">
 							<span aria-hidden="true">&gt;</span>
+						</a>
+					</li>
+					<li class="page-item" th:classappend="${plntIlstrList.last} ? 'disabled'">
+						<a class="page-link"
+							th:href="${plntIlstrList.last} ? '#' : @{/plantIlstr(keyword=${keyword}, page=${plntIlstrList.getTotalPages()})}">
+							<span aria-hidden="true">&gt;&gt;</span>
 						</a>
 					</li>
 				</ul>

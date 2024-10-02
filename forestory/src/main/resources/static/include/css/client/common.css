@@ -9,10 +9,11 @@
 #title-img {
 	padding-top: 100px;
 	padding-bottom: 100px;
-	background-image: url('/resources/images/flowers-5.jpg');
+	background-image: url('/resources/images/스크린샷%202024-10-02%20224843.png');
 	background-size: cover;
 }
 
 #title-img h1 {
 	color: white;
+	text-shadow: 0 0 10px black;
 }

@@ -5,11 +5,14 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -29,8 +32,21 @@ public class ApiService {
 	private PlntIlstrSearchRepository psRepository;
 	
 	@Transactional
-	public List<PlntIlstrSearch> plntList() {
-		List<PlntIlstrSearch> plnData = psRepository.findAll();
+	public Page<PlntIlstrSearch> plntList(String keyword, Pageable pageable) {
+		
+		Page<PlntIlstrSearch> plnData;
+		
+		if(keyword == null) {
+			plnData = psRepository.findAll(pageable);
+		}else {
+			boolean lan= Pattern.matches("^[ㄱ-ㅎ가-힣]*$", keyword); //한글이면 true
+			if(lan) {
+				plnData = psRepository.findByPlantGnrlNmContaining(keyword, pageable); //한글명 검색
+			}else {
+				plnData = psRepository.findByEngNmContaining(keyword, pageable); //영문명 검색
+			}
+		}
+		
 		return plnData;
 	}
 	
@@ -40,7 +56,7 @@ public class ApiService {
 		return pln;
 	}
 	
-	public void plntIlstrSearchUpdate() throws Exception {
+	public String plntIlstrSearchUpdate() throws Exception {
 		
 		final String SEARCH_URL = "http://openapi.nature.go.kr/openapi/service/rest/PlantService/plntIlstrSearch";
 		final String INFO_URL = "http://openapi.nature.go.kr/openapi/service/rest/PlantService/plntIlstrInfo";
@@ -125,39 +141,13 @@ public class ApiService {
 			}
 			
 			psRepository.saveAll(psData);
-			System.out.println("성공");
 			
-	        
-	        
-//	        Document document = (Document) DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(url.toString());
-//	        
-//	        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//	        conn.setRequestMethod(openApi.getMethod());
-//	        conn.setRequestProperty("Content-type", openApi.getContentType());
-//	        
-//	        System.out.println("Response code: " + conn.getResponseCode());
-//	        
-//	        
-//	        
-//	        
-//	        BufferedReader rd;
-//	        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
-//	            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//	        } else {
-//	            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-//	        }
-//	        StringBuilder sb = new StringBuilder();
-//	        String line;
-//	        while ((line = rd.readLine()) != null) {
-//	            sb.append(line);
-//	        }
-//	        rd.close();
-//	        System.out.println(sb.toString());
-//	        conn.disconnect();
 			
-		} catch(SAXException e) {
+			
+		} catch(IOException e) {
 			e.printStackTrace();
 		}
+		return "db입력성공";
 
 	}
 	

@@ -8,11 +8,33 @@
 		  height: 200px; 
 	   }
    </style>
+   <script th:inline="javascript">
+	   /*<![CDATA[*/
+	   $(function(){
+		   
+		   let params = new URLSearchParams(window.location.search);
+		   
+		   /* 검색 버튼 클릭 시 */
+      		$("#searchBtn").click(function(){
+				let keyword = $("#keyword").val().replace(' ','');
+				params.set('keyword', keyword);
+
+				let finalURI = location.pathname + "?" + params.toString();
+				location.href = finalURI;
+			});
+		   
+	   }); //끝
+	   /*]]>*/
+   </script>
 </head>
 <div layout:fragment="content" class="container">
 	<div>
 		<div>
 			<span>식물검색</span>
+			<div class="input-group mb-3">
+			  <input type="text" class="form-control" id="keyword" name="keyword" th:value="${keyword}" placeholder="검색어를 입력해주세요">
+			  <button class="btn btn-outline-secondary" id="searchBtn" name="searchBtn" type="button">검색</button>
+			</div>
 		</div>
 		
 		<div >
@@ -35,6 +57,34 @@
 					</div>
 				</a></li>
 			</ul>	
+		</div>
+		
+		<!-- 페이징 처리 -->
+		<div class="text-center">
+			<nav th:if="${!plntIlstrList.isEmpty()}">
+				<ul class="pagination pagination-ul">
+					<li class="page-item" th:classappend="${plntIlstrList.first} ? 'disabled'">
+						<a class="page-link"
+							th:href="${plntIlstrList.first} ? '#' : @{/plantIlstr(keyword=${keyword}, page=${plntIlstrList.pageable.pageNumber - 1})}">
+							<span aria-hidden="true">&lt;</span>
+						</a>
+					</li>
+	
+					<li th:each="page : ${#numbers.sequence(startPage, endPage)}"
+						th:classappend="${page == plntIlstrList.pageable.pageNumber + 1} ? 'active'">
+						<a class="page-link"
+							th:href="@{/plantIlstr(keyword=${keyword}, page=${page - 1})}"
+							th:text="${page}"></a>
+					</li>
+	
+					<li class="page-item" th:classappend="${plntIlstrList.last} ? 'disabled'">
+						<a class="page-link"
+							th:href="${plntIlstrList.last} ? '#' : @{/plantIlstr(keyword=${keyword}, page=${plntIlstrList.pageable.pageNumber + 1})}">
+							<span aria-hidden="true">&gt;</span>
+						</a>
+					</li>
+				</ul>
+			</nav>
 		</div>
 	</div>
 </div>

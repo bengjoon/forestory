@@ -61,7 +61,7 @@ public class ApiService {
 		final String SEARCH_URL = "http://openapi.nature.go.kr/openapi/service/rest/PlantService/plntIlstrSearch";
 		final String INFO_URL = "http://openapi.nature.go.kr/openapi/service/rest/PlantService/plntIlstrInfo";
 		final String SUERVICE_KEY = "4TNaRbWvrkhc0m1QoK9DXROdpO8GcmzIrTE4xnpXo8lJ0pie8T0eH7kcPEEKPz4cOOkGUs7pIE%2B35B82fW3m9g%3D%3D";
-		final int NUM_Of_ROWS = 100;
+		final int NUM_Of_ROWS = 1000;
 		
 		int pageLength = pageLength(SEARCH_URL, SUERVICE_KEY, "totalCount", NUM_Of_ROWS); /* 페이지 수 */
 		
